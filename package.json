@@ -1,0 +1,34 @@
+{
+  "name": "academic-scriptures",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Open-source platform for rigorous study and comparison of sacred texts.",
+  "type": "module",
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "dev": "npm run dev --workspace @academic-scriptures/web",
+    "build": "npm run build --workspaces --if-present",
+    "check": "npm run typecheck && npm run lint && npm run test",
+    "typecheck": "npm run typecheck --workspaces --if-present",
+    "lint": "eslint .",
+    "test": "vitest run",
+    "test:watch": "vitest"
+  },
+  "engines": {
+    "node": ">=22.12"
+  },
+  "license": "MIT",
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "@types/node": "^24.10.13",
+    "eslint": "^10.7.0",
+    "globals": "^17.4.0",
+    "typescript": "^5.9.3",
+    "typescript-eslint": "^8.65.0",
+    "vitest": "^4.1.10"
+  }
+}
+

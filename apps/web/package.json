@@ -1,0 +1,26 @@
+{
+  "name": "@academic-scriptures/web",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc -b && vite build",
+    "typecheck": "tsc -b --pretty false"
+  },
+  "dependencies": {
+    "@academic-scriptures/corpus": "0.1.0",
+    "@academic-scriptures/domain": "0.1.0",
+    "@vitejs/plugin-react": "^6.0.4",
+    "react": "^19.2.8",
+    "react-dom": "^19.2.8",
+    "vite": "^8.1.5",
+    "vite-plugin-pwa": "^1.3.0"
+  },
+  "devDependencies": {
+    "@types/react": "^19.2.14",
+    "@types/react-dom": "^19.2.3",
+    "typescript": "^5.9.3"
+  }
+}
+

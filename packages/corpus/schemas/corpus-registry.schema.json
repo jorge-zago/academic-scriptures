@@ -1,0 +1,29 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://academic-scriptures.org/schemas/corpus-registry.schema.json",
+  "title": "Academic Scriptures corpus registry",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "corpora"],
+  "properties": {
+    "schemaVersion": {
+      "const": 1
+    },
+    "corpora": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "title", "licenseId", "manifest", "sha256"],
+        "properties": {
+          "id": { "type": "string", "minLength": 1 },
+          "title": { "type": "string", "minLength": 1 },
+          "licenseId": { "type": "string", "minLength": 1 },
+          "manifest": { "type": "string", "minLength": 1 },
+          "sha256": { "type": "string", "pattern": "^[a-f0-9]{64}$" }
+        }
+      }
+    }
+  }
+}
+

@@ -1,0 +1,6 @@
+{
+  "$schema": "../packages/corpus/schemas/corpus-registry.schema.json",
+  "schemaVersion": 1,
+  "corpora": []
+}
+
