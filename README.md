@@ -10,9 +10,11 @@ reconstructions, and user notes.
 
 ## Status
 
-This repository contains the initial application shell and architecture. No
-sacred-text corpus is included until its copyright and redistribution terms
-have been documented.
+This repository contains the first functional reader: catalog navigation,
+literal and reference search, parallel editions, private local notes, history,
+portable export/import, and explicit offline controls. It includes only small
+source excerpts whose copyright and redistribution terms are documented; full
+corpora remain gated by the content registry.
 
 ## Development
 
@@ -55,4 +57,3 @@ docs/                  Architecture, privacy, and licensing decisions
 
 Code is licensed under the [MIT License](LICENSE). Textual content is licensed
 separately and is never covered automatically by the code license.
-

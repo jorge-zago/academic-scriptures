@@ -12,6 +12,8 @@
     "@academic-scriptures/corpus": "0.1.0",
     "@academic-scriptures/domain": "0.1.0",
     "@vitejs/plugin-react": "^6.0.4",
+    "jszip": "^3.10.1",
+    "lucide-react": "^1.26.0",
     "react": "^19.2.8",
     "react-dom": "^19.2.8",
     "vite": "^8.1.5",
@@ -23,4 +25,3 @@
     "typescript": "^5.9.3"
   }
 }
-

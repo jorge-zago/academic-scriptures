@@ -1,17 +1,13 @@
 export type EntityId<T extends string> = string & { readonly __entity: T };
 
 export type TextDirection = 'ltr' | 'rtl' | 'auto';
-
+export type Availability = 'available' | 'licensed-sample' | 'unavailable';
 export type ResourceCategory =
   | 'primary-sacred-text'
   | 'translation'
   | 'manuscript-witness'
   | 'critical-edition'
-  | 'commentary'
-  | 'historical-source'
-  | 'interpretation'
-  | 'denominational-position'
-  | 'academic-reconstruction'
+  | 'paratext'
   | 'user-note';
 
 export interface LocalizedLabel {
@@ -26,7 +22,7 @@ export interface SourceReference {
   accessedOn: string;
 }
 
-export interface LicenseRecord {
+export interface CorpusLicense {
   id: EntityId<'license'>;
   name: string;
   copyrightHolder: string;
@@ -37,11 +33,31 @@ export interface LicenseRecord {
   attribution: string;
 }
 
+export interface Religion {
+  id: EntityId<'religion'>;
+  slug: string;
+  labels: LocalizedLabel[];
+  description: LocalizedLabel[];
+  availability: Availability;
+}
+
+export interface Collection {
+  id: EntityId<'collection'>;
+  religionId: EntityId<'religion'>;
+  slug: string;
+  labels: LocalizedLabel[];
+  workIds: EntityId<'work'>[];
+  availability: Availability;
+}
+
 export interface Work {
   id: EntityId<'work'>;
-  traditionId: EntityId<'tradition'>;
+  slug: string;
   labels: LocalizedLabel[];
+  collectionIds: EntityId<'collection'>[];
   category: ResourceCategory;
+  divisionType: string;
+  aliases: string[];
 }
 
 export interface Edition {
@@ -51,13 +67,67 @@ export interface Edition {
   language: string;
   direction: TextDirection;
   title: string;
+  shortTitle: string;
   version: string;
+  isSourceLanguage: boolean;
+  translationOf?: EntityId<'edition'>;
+  availability: Availability;
 }
 
-export interface PassageRef {
+export interface TranslationRelation {
+  sourceEditionId: EntityId<'edition'>;
+  translationEditionId: EntityId<'edition'>;
+  relation: 'translation-of';
+}
+
+export interface Division {
+  id: EntityId<'division'>;
+  workId: EntityId<'work'>;
+  order: number;
+  label: string;
+  locator: string;
+  previousId?: EntityId<'division'>;
+  nextId?: EntityId<'division'>;
+}
+
+export interface Passage {
+  id: EntityId<'passage'>;
   editionId: EntityId<'edition'>;
-  divisionId: string;
-  start: string;
+  divisionId: EntityId<'division'>;
+  locator: string;
+  number: string;
+  text: string;
+  heading?: string;
+  translatorNote?: string;
+  crossReferences?: string[];
+}
+
+export interface PassageRange {
+  workId: EntityId<'work'>;
+  divisionLocator: string;
+  start?: string;
   end?: string;
 }
 
+export interface UserAnnotation {
+  id: string;
+  passageId: EntityId<'passage'>;
+  editionId: EntityId<'edition'>;
+  selectedText?: string;
+  note: string;
+  color: 'graphite' | 'sage' | 'ochre';
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface ReadingPosition {
+  religionId: EntityId<'religion'>;
+  workId: EntityId<'work'>;
+  divisionId: EntityId<'division'>;
+  editionIds: EntityId<'edition'>[];
+  updatedAt: string;
+}
+
+// Kept as a compatibility alias for integrations using the initial name.
+export type LicenseRecord = CorpusLicense;
+export type PassageRef = PassageRange & { editionId: EntityId<'edition'> };

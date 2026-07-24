@@ -14,16 +14,35 @@
       "items": {
         "type": "object",
         "additionalProperties": false,
-        "required": ["id", "title", "licenseId", "manifest", "sha256"],
+        "required": [
+          "id",
+          "title",
+          "religionId",
+          "workId",
+          "editionId",
+          "language",
+          "direction",
+          "licenseId",
+          "manifest",
+          "sha256",
+          "offlineAllowed",
+          "completeness"
+        ],
         "properties": {
           "id": { "type": "string", "minLength": 1 },
           "title": { "type": "string", "minLength": 1 },
+          "religionId": { "type": "string", "minLength": 1 },
+          "workId": { "type": "string", "minLength": 1 },
+          "editionId": { "type": "string", "minLength": 1 },
+          "language": { "type": "string", "minLength": 2 },
+          "direction": { "enum": ["ltr", "rtl", "auto"] },
           "licenseId": { "type": "string", "minLength": 1 },
           "manifest": { "type": "string", "minLength": 1 },
-          "sha256": { "type": "string", "pattern": "^[a-f0-9]{64}$" }
+          "sha256": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+          "offlineAllowed": { "type": "boolean" },
+          "completeness": { "enum": ["sample", "complete"] }
         }
       }
     }
   }
 }
-

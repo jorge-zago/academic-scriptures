@@ -24,6 +24,15 @@ only its catalog, work metadata, and requested passage chunks.
 5. Cache approved offline resources.
 6. Store bookmarks, highlights, notes, and preferences in IndexedDB.
 
+## Current V1 surface
+
+The V1 reader is deliberately client-only. It presents three Abrahamic catalog
+contexts with licensed excerpts used to validate multilingual, bidirectional,
+parallel-reading, and reference-search behavior. Excerpts are not represented
+as complete corpora. A religion can be promoted to complete catalog status only
+when source-language, Spanish, and English editions pass the license registry
+and completeness checks.
+
 ## Rendering
 
 The interactive reader is a client application. Public informational pages can

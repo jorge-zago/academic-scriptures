@@ -11,6 +11,11 @@
     "forceConsistentCasingInFileNames": true,
     "module": "ESNext",
     "moduleResolution": "Bundler",
+    "baseUrl": ".",
+    "paths": {
+      "@academic-scriptures/domain": ["../../packages/domain/src/index.ts"],
+      "@academic-scriptures/corpus": ["../../packages/corpus/src/index.ts"]
+    },
     "resolveJsonModule": true,
     "isolatedModules": true,
     "noEmit": true,
@@ -19,4 +24,3 @@
   },
   "include": ["src"]
 }
-
