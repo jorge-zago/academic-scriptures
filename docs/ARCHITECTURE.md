@@ -2,8 +2,9 @@
 
 Academic Scriptures begins as a static React application deployed from
 `apps/web/dist`. Cloudflare Pages reads this output path from the repository's
-`wrangler.jsonc`. Public corpus files will be immutable, versioned static
-assets. User-created data will be local-first and stored separately.
+`wrangler.jsonc`. Public corpus files are immutable static assets generated
+from documented USFM sources. User-created data remains local-first and stored
+separately.
 
 ## Boundaries
 
@@ -15,23 +16,23 @@ assets. User-created data will be local-first and stored separately.
 The application bundle must not import complete corpora. A reader route loads
 only its catalog, work metadata, and requested passage chunks.
 
-## Planned data flow
+## Data flow
 
 1. Load the small global catalog.
 2. Resolve a work, edition, and passage through stable identifiers.
-3. Fetch an immutable, content-hashed passage chunk.
-4. Validate its schema version.
-5. Cache approved offline resources.
-6. Store bookmarks, highlights, notes, and preferences in IndexedDB.
+3. Fetch only the selected book and edition from `/corpora`.
+4. Keep loaded books in an in-memory session cache.
+5. Load a complete edition index only when literal search is requested.
+6. Store pins, bookmarks, highlights, notes, and preferences locally.
 
 ## Current V1 surface
 
-The V1 reader is deliberately client-only. It presents three Abrahamic catalog
-contexts with licensed excerpts used to validate multilingual, bidirectional,
-parallel-reading, and reference-search behavior. Excerpts are not represented
-as complete corpora. A religion can be promoted to complete catalog status only
-when source-language, Spanish, and English editions pass the license registry
-and completeness checks.
+The V1 reader is deliberately client-only. Christianity contains all 66 books
+and 1,189 chapters in complete Spanish and English public-domain translations,
+plus the complete WLC Hebrew Old Testament and SBLGNT Greek New Testament.
+The import is reproducible with `npm run import:corpora`; `npm run
+verify:corpora` checks book, chapter, verse, and empty-text counts. Judaism and
+Islam remain sample contexts rather than being overstated as complete.
 
 ## Rendering
 

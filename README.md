@@ -10,11 +10,12 @@ reconstructions, and user notes.
 
 ## Status
 
-This repository contains the first functional reader: catalog navigation,
-literal and reference search, parallel editions, private local notes, history,
-portable export/import, and explicit offline controls. It includes only small
-source excerpts whose copyright and redistribution terms are documented; full
-corpora remain gated by the content registry.
+This repository contains the functional reader: reference and literal search,
+parallel editions, pinned collections, searchable local notes, and portable
+export/import. The Christian Bible is complete in four documented editions:
+Reina-Valera 1909, World English Bible, Westminster Leningrad Codex, and
+SBLGNT. Judaism and Islam remain clearly marked as incomplete until the
+required translation sets are verified.
 
 ## Development
 
@@ -39,8 +40,10 @@ npm run build
 
 ```text
 apps/web/              React/Vite progressive web application
+apps/web/public/corpora Complete, generated Bible corpus chunks and indexes
 packages/domain/       Shared domain model
 packages/corpus/       Corpus manifest validation and loading primitives
+scripts/               Reproducible corpus import and integrity verification
 content/               License registry; no unverified corpus data
 docs/                  Architecture, privacy, and licensing decisions
 .github/workflows/     Continuous integration

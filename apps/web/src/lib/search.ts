@@ -1,5 +1,5 @@
 import type { PassageRange } from '@academic-scriptures/domain';
-import { editions, getWork, passages, works } from '../data/catalog';
+import { getWork, works } from '../data/catalog';
 
 export interface ReferenceMatch {
   raw: string;
@@ -108,50 +108,6 @@ export function parseLexicalQuery(query: string): LexicalQuery {
     .map(normalize)
     .filter(Boolean);
   return { phrases, required, excluded, alternatives };
-}
-
-export function searchText(
-  query: string,
-  religionWorkIds?: string[],
-): SearchResult[] {
-  const parsed = parseLexicalQuery(query);
-  if (
-    !parsed.phrases.length &&
-    !parsed.required.length &&
-    !parsed.alternatives.length
-  ) {
-    return [];
-  }
-
-  return passages
-    .filter((passage) => {
-      const edition = editions.find((item) => item.id === passage.editionId);
-      if (!edition) return false;
-      if (
-        religionWorkIds?.length &&
-        !religionWorkIds.includes(edition.workId)
-      ) {
-        return false;
-      }
-      const haystack = normalize(passage.text);
-      return (
-        parsed.phrases.every((phrase) => haystack.includes(phrase)) &&
-        parsed.required.every((term) => haystack.includes(term)) &&
-        parsed.excluded.every((term) => !haystack.includes(term)) &&
-        (!parsed.alternatives.length ||
-          parsed.alternatives.some((term) => haystack.includes(term)))
-      );
-    })
-    .map((passage) => {
-      const edition = editions.find((item) => item.id === passage.editionId)!;
-      return {
-        passageId: passage.id,
-        workId: edition.workId,
-        editionId: edition.id,
-        locator: passage.locator,
-        text: passage.text,
-      };
-    });
 }
 
 export function isAmbiguousWorkQuery(query: string) {

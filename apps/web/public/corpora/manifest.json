@@ -1,0 +1,1172 @@
+{
+  "schemaVersion": 1,
+  "generatedOn": "2026-07-24T16:35:42.034Z",
+  "sources": [
+    {
+      "id": "rv1909",
+      "folder": "spaRV1909",
+      "title": "Reina-Valera 1909",
+      "shortTitle": "RV1909",
+      "language": "es",
+      "direction": "ltr",
+      "testament": "both",
+      "licenseId": "license-public-domain",
+      "sourceUrl": "https://ebible.org/bible/details.php?id=spaRV1909",
+      "version": "1909",
+      "source": false
+    },
+    {
+      "id": "web",
+      "folder": "engwebp",
+      "title": "World English Bible",
+      "shortTitle": "WEB",
+      "language": "en",
+      "direction": "ltr",
+      "testament": "both",
+      "licenseId": "license-public-domain",
+      "sourceUrl": "https://ebible.org/details.php?id=engwebp",
+      "version": "2025",
+      "source": false
+    },
+    {
+      "id": "wlc",
+      "folder": "hboWLC",
+      "title": "Westminster Leningrad Codex",
+      "shortTitle": "WLC",
+      "language": "he",
+      "direction": "rtl",
+      "testament": "old",
+      "licenseId": "license-public-domain",
+      "sourceUrl": "https://hb.openscriptures.org/",
+      "version": "4.20",
+      "source": true
+    },
+    {
+      "id": "sblgnt",
+      "folder": "grcsbl",
+      "title": "SBL Greek New Testament",
+      "shortTitle": "SBLGNT",
+      "language": "grc",
+      "direction": "ltr",
+      "testament": "new",
+      "licenseId": "license-sblgnt",
+      "sourceUrl": "https://github.com/LogosBible/SBLGNT",
+      "version": "1.2",
+      "source": true
+    }
+  ],
+  "books": [
+    {
+      "code": "GEN",
+      "id": "genesis",
+      "es": "Génesis",
+      "en": "Genesis",
+      "aliases": [
+        "gen",
+        "gn",
+        "génesis",
+        "genesis"
+      ],
+      "testament": "old",
+      "chapterCount": 50
+    },
+    {
+      "code": "EXO",
+      "id": "exodus",
+      "es": "Éxodo",
+      "en": "Exodus",
+      "aliases": [
+        "ex",
+        "exo",
+        "éxodo",
+        "exodus"
+      ],
+      "testament": "old",
+      "chapterCount": 40
+    },
+    {
+      "code": "LEV",
+      "id": "leviticus",
+      "es": "Levítico",
+      "en": "Leviticus",
+      "aliases": [
+        "lv",
+        "lev",
+        "levítico",
+        "leviticus"
+      ],
+      "testament": "old",
+      "chapterCount": 27
+    },
+    {
+      "code": "NUM",
+      "id": "numbers",
+      "es": "Números",
+      "en": "Numbers",
+      "aliases": [
+        "nm",
+        "num",
+        "números",
+        "numbers"
+      ],
+      "testament": "old",
+      "chapterCount": 36
+    },
+    {
+      "code": "DEU",
+      "id": "deuteronomy",
+      "es": "Deuteronomio",
+      "en": "Deuteronomy",
+      "aliases": [
+        "dt",
+        "deu",
+        "deuteronomio",
+        "deuteronomy"
+      ],
+      "testament": "old",
+      "chapterCount": 34
+    },
+    {
+      "code": "JOS",
+      "id": "joshua",
+      "es": "Josué",
+      "en": "Joshua",
+      "aliases": [
+        "jos",
+        "josué",
+        "joshua"
+      ],
+      "testament": "old",
+      "chapterCount": 24
+    },
+    {
+      "code": "JDG",
+      "id": "judges",
+      "es": "Jueces",
+      "en": "Judges",
+      "aliases": [
+        "jue",
+        "jdg",
+        "jueces",
+        "judges"
+      ],
+      "testament": "old",
+      "chapterCount": 21
+    },
+    {
+      "code": "RUT",
+      "id": "ruth",
+      "es": "Rut",
+      "en": "Ruth",
+      "aliases": [
+        "rut",
+        "ruth"
+      ],
+      "testament": "old",
+      "chapterCount": 4
+    },
+    {
+      "code": "1SA",
+      "id": "1-samuel",
+      "es": "1 Samuel",
+      "en": "1 Samuel",
+      "aliases": [
+        "1 sa",
+        "1 sam",
+        "1 samuel"
+      ],
+      "testament": "old",
+      "chapterCount": 31
+    },
+    {
+      "code": "2SA",
+      "id": "2-samuel",
+      "es": "2 Samuel",
+      "en": "2 Samuel",
+      "aliases": [
+        "2 sa",
+        "2 sam",
+        "2 samuel"
+      ],
+      "testament": "old",
+      "chapterCount": 24
+    },
+    {
+      "code": "1KI",
+      "id": "1-kings",
+      "es": "1 Reyes",
+      "en": "1 Kings",
+      "aliases": [
+        "1 re",
+        "1 rey",
+        "1 ki",
+        "1 kings",
+        "1 reyes"
+      ],
+      "testament": "old",
+      "chapterCount": 22
+    },
+    {
+      "code": "2KI",
+      "id": "2-kings",
+      "es": "2 Reyes",
+      "en": "2 Kings",
+      "aliases": [
+        "2 re",
+        "2 rey",
+        "2 ki",
+        "2 kings",
+        "2 reyes"
+      ],
+      "testament": "old",
+      "chapterCount": 25
+    },
+    {
+      "code": "1CH",
+      "id": "1-chronicles",
+      "es": "1 Crónicas",
+      "en": "1 Chronicles",
+      "aliases": [
+        "1 cr",
+        "1 cro",
+        "1 ch",
+        "1 chronicles",
+        "1 crónicas"
+      ],
+      "testament": "old",
+      "chapterCount": 29
+    },
+    {
+      "code": "2CH",
+      "id": "2-chronicles",
+      "es": "2 Crónicas",
+      "en": "2 Chronicles",
+      "aliases": [
+        "2 cr",
+        "2 cro",
+        "2 ch",
+        "2 chronicles",
+        "2 crónicas"
+      ],
+      "testament": "old",
+      "chapterCount": 36
+    },
+    {
+      "code": "EZR",
+      "id": "ezra",
+      "es": "Esdras",
+      "en": "Ezra",
+      "aliases": [
+        "esd",
+        "ezr",
+        "esdras",
+        "ezra"
+      ],
+      "testament": "old",
+      "chapterCount": 10
+    },
+    {
+      "code": "NEH",
+      "id": "nehemiah",
+      "es": "Nehemías",
+      "en": "Nehemiah",
+      "aliases": [
+        "neh",
+        "nehemías",
+        "nehemiah"
+      ],
+      "testament": "old",
+      "chapterCount": 13
+    },
+    {
+      "code": "EST",
+      "id": "esther",
+      "es": "Ester",
+      "en": "Esther",
+      "aliases": [
+        "est",
+        "ester",
+        "esther"
+      ],
+      "testament": "old",
+      "chapterCount": 10
+    },
+    {
+      "code": "JOB",
+      "id": "job",
+      "es": "Job",
+      "en": "Job",
+      "aliases": [
+        "job"
+      ],
+      "testament": "old",
+      "chapterCount": 42
+    },
+    {
+      "code": "PSA",
+      "id": "psalms",
+      "es": "Salmos",
+      "en": "Psalms",
+      "aliases": [
+        "sal",
+        "salmo",
+        "salmos",
+        "ps",
+        "psalm",
+        "psalms"
+      ],
+      "testament": "old",
+      "chapterCount": 150
+    },
+    {
+      "code": "PRO",
+      "id": "proverbs",
+      "es": "Proverbios",
+      "en": "Proverbs",
+      "aliases": [
+        "pr",
+        "prov",
+        "proverbios",
+        "proverbs"
+      ],
+      "testament": "old",
+      "chapterCount": 31
+    },
+    {
+      "code": "ECC",
+      "id": "ecclesiastes",
+      "es": "Eclesiastés",
+      "en": "Ecclesiastes",
+      "aliases": [
+        "ec",
+        "ecl",
+        "eclesiastés",
+        "ecclesiastes"
+      ],
+      "testament": "old",
+      "chapterCount": 12
+    },
+    {
+      "code": "SNG",
+      "id": "song-of-songs",
+      "es": "Cantar de los Cantares",
+      "en": "Song of Songs",
+      "aliases": [
+        "cnt",
+        "cantares",
+        "song",
+        "song of songs"
+      ],
+      "testament": "old",
+      "chapterCount": 8
+    },
+    {
+      "code": "ISA",
+      "id": "isaiah",
+      "es": "Isaías",
+      "en": "Isaiah",
+      "aliases": [
+        "is",
+        "isa",
+        "isaías",
+        "isaiah"
+      ],
+      "testament": "old",
+      "chapterCount": 66
+    },
+    {
+      "code": "JER",
+      "id": "jeremiah",
+      "es": "Jeremías",
+      "en": "Jeremiah",
+      "aliases": [
+        "jer",
+        "jeremías",
+        "jeremiah"
+      ],
+      "testament": "old",
+      "chapterCount": 52
+    },
+    {
+      "code": "LAM",
+      "id": "lamentations",
+      "es": "Lamentaciones",
+      "en": "Lamentations",
+      "aliases": [
+        "lam",
+        "lamentaciones",
+        "lamentations"
+      ],
+      "testament": "old",
+      "chapterCount": 5
+    },
+    {
+      "code": "EZK",
+      "id": "ezekiel",
+      "es": "Ezequiel",
+      "en": "Ezekiel",
+      "aliases": [
+        "ez",
+        "ezk",
+        "ezequiel",
+        "ezekiel"
+      ],
+      "testament": "old",
+      "chapterCount": 48
+    },
+    {
+      "code": "DAN",
+      "id": "daniel",
+      "es": "Daniel",
+      "en": "Daniel",
+      "aliases": [
+        "dan",
+        "daniel"
+      ],
+      "testament": "old",
+      "chapterCount": 12
+    },
+    {
+      "code": "HOS",
+      "id": "hosea",
+      "es": "Oseas",
+      "en": "Hosea",
+      "aliases": [
+        "os",
+        "hos",
+        "oseas",
+        "hosea"
+      ],
+      "testament": "old",
+      "chapterCount": 14
+    },
+    {
+      "code": "JOL",
+      "id": "joel",
+      "es": "Joel",
+      "en": "Joel",
+      "aliases": [
+        "jl",
+        "jol",
+        "joel"
+      ],
+      "testament": "old",
+      "chapterCount": 3
+    },
+    {
+      "code": "AMO",
+      "id": "amos",
+      "es": "Amós",
+      "en": "Amos",
+      "aliases": [
+        "am",
+        "amo",
+        "amós",
+        "amos"
+      ],
+      "testament": "old",
+      "chapterCount": 9
+    },
+    {
+      "code": "OBA",
+      "id": "obadiah",
+      "es": "Abdías",
+      "en": "Obadiah",
+      "aliases": [
+        "abd",
+        "oba",
+        "abdías",
+        "obadiah"
+      ],
+      "testament": "old",
+      "chapterCount": 1
+    },
+    {
+      "code": "JON",
+      "id": "jonah",
+      "es": "Jonás",
+      "en": "Jonah",
+      "aliases": [
+        "jon",
+        "jonás",
+        "jonah"
+      ],
+      "testament": "old",
+      "chapterCount": 4
+    },
+    {
+      "code": "MIC",
+      "id": "micah",
+      "es": "Miqueas",
+      "en": "Micah",
+      "aliases": [
+        "mi",
+        "mic",
+        "miqueas",
+        "micah"
+      ],
+      "testament": "old",
+      "chapterCount": 7
+    },
+    {
+      "code": "NAM",
+      "id": "nahum",
+      "es": "Nahúm",
+      "en": "Nahum",
+      "aliases": [
+        "nah",
+        "nam",
+        "nahúm",
+        "nahum"
+      ],
+      "testament": "old",
+      "chapterCount": 3
+    },
+    {
+      "code": "HAB",
+      "id": "habakkuk",
+      "es": "Habacuc",
+      "en": "Habakkuk",
+      "aliases": [
+        "hab",
+        "habacuc",
+        "habakkuk"
+      ],
+      "testament": "old",
+      "chapterCount": 3
+    },
+    {
+      "code": "ZEP",
+      "id": "zephaniah",
+      "es": "Sofonías",
+      "en": "Zephaniah",
+      "aliases": [
+        "sof",
+        "zep",
+        "sofonías",
+        "zephaniah"
+      ],
+      "testament": "old",
+      "chapterCount": 3
+    },
+    {
+      "code": "HAG",
+      "id": "haggai",
+      "es": "Hageo",
+      "en": "Haggai",
+      "aliases": [
+        "hag",
+        "hageo",
+        "haggai"
+      ],
+      "testament": "old",
+      "chapterCount": 2
+    },
+    {
+      "code": "ZEC",
+      "id": "zechariah",
+      "es": "Zacarías",
+      "en": "Zechariah",
+      "aliases": [
+        "zac",
+        "zec",
+        "zacarías",
+        "zechariah"
+      ],
+      "testament": "old",
+      "chapterCount": 14
+    },
+    {
+      "code": "MAL",
+      "id": "malachi",
+      "es": "Malaquías",
+      "en": "Malachi",
+      "aliases": [
+        "mal",
+        "malaquías",
+        "malachi"
+      ],
+      "testament": "old",
+      "chapterCount": 4
+    },
+    {
+      "code": "MAT",
+      "id": "matthew",
+      "es": "Mateo",
+      "en": "Matthew",
+      "aliases": [
+        "mt",
+        "mat",
+        "mateo",
+        "matthew"
+      ],
+      "testament": "new",
+      "chapterCount": 28
+    },
+    {
+      "code": "MRK",
+      "id": "mark",
+      "es": "Marcos",
+      "en": "Mark",
+      "aliases": [
+        "mc",
+        "mar",
+        "marcos",
+        "mk",
+        "mark"
+      ],
+      "testament": "new",
+      "chapterCount": 16
+    },
+    {
+      "code": "LUK",
+      "id": "luke",
+      "es": "Lucas",
+      "en": "Luke",
+      "aliases": [
+        "lc",
+        "luc",
+        "lucas",
+        "lk",
+        "luke"
+      ],
+      "testament": "new",
+      "chapterCount": 24
+    },
+    {
+      "code": "JHN",
+      "id": "john",
+      "es": "Juan",
+      "en": "John",
+      "aliases": [
+        "jn",
+        "juan",
+        "john"
+      ],
+      "testament": "new",
+      "chapterCount": 21
+    },
+    {
+      "code": "ACT",
+      "id": "acts",
+      "es": "Hechos",
+      "en": "Acts",
+      "aliases": [
+        "hch",
+        "hechos",
+        "act",
+        "acts"
+      ],
+      "testament": "new",
+      "chapterCount": 28
+    },
+    {
+      "code": "ROM",
+      "id": "romans",
+      "es": "Romanos",
+      "en": "Romans",
+      "aliases": [
+        "ro",
+        "rom",
+        "romanos",
+        "romans"
+      ],
+      "testament": "new",
+      "chapterCount": 16
+    },
+    {
+      "code": "1CO",
+      "id": "1-corinthians",
+      "es": "1 Corintios",
+      "en": "1 Corinthians",
+      "aliases": [
+        "1 co",
+        "1 cor",
+        "1 corintios",
+        "1 corinthians"
+      ],
+      "testament": "new",
+      "chapterCount": 16
+    },
+    {
+      "code": "2CO",
+      "id": "2-corinthians",
+      "es": "2 Corintios",
+      "en": "2 Corinthians",
+      "aliases": [
+        "2 co",
+        "2 cor",
+        "2 corintios",
+        "2 corinthians"
+      ],
+      "testament": "new",
+      "chapterCount": 13
+    },
+    {
+      "code": "GAL",
+      "id": "galatians",
+      "es": "Gálatas",
+      "en": "Galatians",
+      "aliases": [
+        "ga",
+        "gal",
+        "gálatas",
+        "galatians"
+      ],
+      "testament": "new",
+      "chapterCount": 6
+    },
+    {
+      "code": "EPH",
+      "id": "ephesians",
+      "es": "Efesios",
+      "en": "Ephesians",
+      "aliases": [
+        "ef",
+        "eph",
+        "efesios",
+        "ephesians"
+      ],
+      "testament": "new",
+      "chapterCount": 6
+    },
+    {
+      "code": "PHP",
+      "id": "philippians",
+      "es": "Filipenses",
+      "en": "Philippians",
+      "aliases": [
+        "fil",
+        "php",
+        "filipenses",
+        "philippians"
+      ],
+      "testament": "new",
+      "chapterCount": 4
+    },
+    {
+      "code": "COL",
+      "id": "colossians",
+      "es": "Colosenses",
+      "en": "Colossians",
+      "aliases": [
+        "col",
+        "colosenses",
+        "colossians"
+      ],
+      "testament": "new",
+      "chapterCount": 4
+    },
+    {
+      "code": "1TH",
+      "id": "1-thessalonians",
+      "es": "1 Tesalonicenses",
+      "en": "1 Thessalonians",
+      "aliases": [
+        "1 ts",
+        "1 tes",
+        "1 th",
+        "1 tesalonicenses",
+        "1 thessalonians"
+      ],
+      "testament": "new",
+      "chapterCount": 5
+    },
+    {
+      "code": "2TH",
+      "id": "2-thessalonians",
+      "es": "2 Tesalonicenses",
+      "en": "2 Thessalonians",
+      "aliases": [
+        "2 ts",
+        "2 tes",
+        "2 th",
+        "2 tesalonicenses",
+        "2 thessalonians"
+      ],
+      "testament": "new",
+      "chapterCount": 3
+    },
+    {
+      "code": "1TI",
+      "id": "1-timothy",
+      "es": "1 Timoteo",
+      "en": "1 Timothy",
+      "aliases": [
+        "1 ti",
+        "1 tim",
+        "1 timoteo",
+        "1 timothy"
+      ],
+      "testament": "new",
+      "chapterCount": 6
+    },
+    {
+      "code": "2TI",
+      "id": "2-timothy",
+      "es": "2 Timoteo",
+      "en": "2 Timothy",
+      "aliases": [
+        "2 ti",
+        "2 tim",
+        "2 timoteo",
+        "2 timothy"
+      ],
+      "testament": "new",
+      "chapterCount": 4
+    },
+    {
+      "code": "TIT",
+      "id": "titus",
+      "es": "Tito",
+      "en": "Titus",
+      "aliases": [
+        "tit",
+        "tito",
+        "titus"
+      ],
+      "testament": "new",
+      "chapterCount": 3
+    },
+    {
+      "code": "PHM",
+      "id": "philemon",
+      "es": "Filemón",
+      "en": "Philemon",
+      "aliases": [
+        "flm",
+        "phm",
+        "filemón",
+        "philemon"
+      ],
+      "testament": "new",
+      "chapterCount": 1
+    },
+    {
+      "code": "HEB",
+      "id": "hebrews",
+      "es": "Hebreos",
+      "en": "Hebrews",
+      "aliases": [
+        "heb",
+        "hebreos",
+        "hebrews"
+      ],
+      "testament": "new",
+      "chapterCount": 13
+    },
+    {
+      "code": "JAS",
+      "id": "james",
+      "es": "Santiago",
+      "en": "James",
+      "aliases": [
+        "stg",
+        "santiago",
+        "jas",
+        "james"
+      ],
+      "testament": "new",
+      "chapterCount": 5
+    },
+    {
+      "code": "1PE",
+      "id": "1-peter",
+      "es": "1 Pedro",
+      "en": "1 Peter",
+      "aliases": [
+        "1 pe",
+        "1 ped",
+        "1 peter",
+        "1 pedro"
+      ],
+      "testament": "new",
+      "chapterCount": 5
+    },
+    {
+      "code": "2PE",
+      "id": "2-peter",
+      "es": "2 Pedro",
+      "en": "2 Peter",
+      "aliases": [
+        "2 pe",
+        "2 ped",
+        "2 peter",
+        "2 pedro"
+      ],
+      "testament": "new",
+      "chapterCount": 3
+    },
+    {
+      "code": "1JN",
+      "id": "1-john",
+      "es": "1 Juan",
+      "en": "1 John",
+      "aliases": [
+        "1 jn",
+        "1 juan",
+        "1 john"
+      ],
+      "testament": "new",
+      "chapterCount": 5
+    },
+    {
+      "code": "2JN",
+      "id": "2-john",
+      "es": "2 Juan",
+      "en": "2 John",
+      "aliases": [
+        "2 jn",
+        "2 juan",
+        "2 john"
+      ],
+      "testament": "new",
+      "chapterCount": 1
+    },
+    {
+      "code": "3JN",
+      "id": "3-john",
+      "es": "3 Juan",
+      "en": "3 John",
+      "aliases": [
+        "3 jn",
+        "3 juan",
+        "3 john"
+      ],
+      "testament": "new",
+      "chapterCount": 1
+    },
+    {
+      "code": "JUD",
+      "id": "jude",
+      "es": "Judas",
+      "en": "Jude",
+      "aliases": [
+        "jud",
+        "judas",
+        "jude"
+      ],
+      "testament": "new",
+      "chapterCount": 1
+    },
+    {
+      "code": "REV",
+      "id": "revelation",
+      "es": "Apocalipsis",
+      "en": "Revelation",
+      "aliases": [
+        "ap",
+        "apo",
+        "apocalipsis",
+        "rev",
+        "revelation"
+      ],
+      "testament": "new",
+      "chapterCount": 22
+    }
+  ],
+  "checksums": {
+    "rv1909/genesis": "ae5230f46efce0389959030f7625d3489c1d0991cbea0e1d49a30401148d62ac",
+    "rv1909/exodus": "83e6bf80ee0fea4c66e3ed0583cbab6136b54dca297ac0db96b6b999a1c6146d",
+    "rv1909/leviticus": "2758518278d16ff26c4f99ac5325c617175e4d2001263e81c171b389566f8f91",
+    "rv1909/numbers": "8ab884f0e22c7f95798d1445f3ff0ccd21cf3515fd93a5c30b9e4650a6ce5dcd",
+    "rv1909/deuteronomy": "acfc6f8128688e2d7d537754a58af583311ea31c0e3c108c011fe51fe8b36d1e",
+    "rv1909/joshua": "00edf5f9fac6d709d09f162b74d9fe9588aae611e06f8e6d50d80e0bdcb2d8f6",
+    "rv1909/judges": "bf79a71df7cc4c22e410c021bd73c8d51ae4b6f59fd32910bed9267347a08a0a",
+    "rv1909/ruth": "20e267edade7f5eaee664f03c2d6571fd4712752e190691f14e4b3ba4ba3f652",
+    "rv1909/1-samuel": "029e75093113140cdfe0906990a161f9fd0d0e704f26c39a68392675a79c8c37",
+    "rv1909/2-samuel": "62a93b5c74679c5ec32b1ef3e31a4e02d77924a68107fe02587a798eafb8aa01",
+    "rv1909/1-kings": "dbcc4832835403e2c0f35c957a02071840e3723e202c5bbb38945594a172e374",
+    "rv1909/2-kings": "813c53fcfb5807ca4e96cc9da89ebe970118149e5a858f910ae8efd09de43e4d",
+    "rv1909/1-chronicles": "4a084f4e4ead33453785dce62eea6fe7e9efda775a356e1ac8c9457fb9fe8784",
+    "rv1909/2-chronicles": "592a4c1ce9d2ac98317d4afb344166d485e4125b1d53b73cf485dbda4df3f618",
+    "rv1909/ezra": "74a65b8c9dfb08d7d8f1d4886289a70603492d448a831d97145a2f75966c8cd0",
+    "rv1909/nehemiah": "20537d1908ef52ad2c17366909feff348b8a3a666071f6920e8ad382006d262f",
+    "rv1909/esther": "025f921d6350829b090708566b184b4f7240bebf331633a642559ad3427f57f4",
+    "rv1909/job": "a3a9ed55efafa6c552bd257cadf0d6eab45ebf4b8453cc81a406ebf7570d0baf",
+    "rv1909/psalms": "08a5f7a55e9c423b14380e7c9b96a1ca41e9ceb2caaf78ebb0979ad07f3e1c61",
+    "rv1909/proverbs": "cfc2225788e5741d5efa50b460ed7282ae653bbf4eb36b4b17ce064f46c5387f",
+    "rv1909/ecclesiastes": "29fa4c1e7f14a84e3511f330f9700ed4876c0d58b0ba19018aeabe8d52a00747",
+    "rv1909/song-of-songs": "2422c7fcede14be145751774a77180a786f12b8a845d0682cc783134c8e047ad",
+    "rv1909/isaiah": "65364d07e5508cd7a979b00103ad34e8ed4dae683d6b70076327768417bd6f60",
+    "rv1909/jeremiah": "0aed015fa37f02235cb04cf9d45a66dd781a3355f4db1cf8496ca42d6a711c0d",
+    "rv1909/lamentations": "e6d1109a350a9cb658ec4d22715411f0a3aafa0b2f5c1787dc3fa0367166b39a",
+    "rv1909/ezekiel": "e704dbfd0f43c13e0cde35fd1e913f583c504aa3d9cca83cb198f782ea5d79ed",
+    "rv1909/daniel": "d94356b24c4243168cb62fd529270469317acaece6dc81d91e3e85b8f516d3c9",
+    "rv1909/hosea": "4c708c1838c4f807559ae3c834ba202e14334cbc39147378b982453fd211e37a",
+    "rv1909/joel": "ac65cd8e3342c132ad90dd7307d34e86de306f4bf502e4cb3a778b1ea4085b97",
+    "rv1909/amos": "275ab3a5f40e09c018078abd256bd0638c3e534f284b198681eb0edc74976636",
+    "rv1909/obadiah": "dc2e64aef037fa267886d02bb5dfd94b781eb432781851c5e61d814d893c074b",
+    "rv1909/jonah": "c9de2efdb33093b556657830ee3c5ba984628eb81cbae61c304f1d456fa6d720",
+    "rv1909/micah": "4be3cccd138552da952d79ee62b539538efd50e53307dd31a68f98c514074a6b",
+    "rv1909/nahum": "62d33f6a90163925415d9523c508cb0dd758ed4a0ce0423a937dddec326b108b",
+    "rv1909/habakkuk": "dfff68d24a7da66926e89330208b1ef199a0e2c9fb0f94810ae6de67759ddf60",
+    "rv1909/zephaniah": "4ad46933dbb0fe31ea7eb563ebe779818df748bb9e5634daa6f7fb1aff2dfcab",
+    "rv1909/haggai": "529f519da5c6082374eaa9d92ad8b8614fd1e770519091a943a17a3fdf9effa7",
+    "rv1909/zechariah": "7fa83a32f07d7ed5b257433b6798c28e1eec9f615046c7dfbeacf86652309185",
+    "rv1909/malachi": "13ab1bc943eace342b67ca571d4ecce62053f548763419107567b37ba29050ec",
+    "rv1909/matthew": "e15f668554e79140e38709dd5a839d5a791342fb99a21da40aedcddc1c87cecc",
+    "rv1909/mark": "e3b094bac7d5e7cfd6c04b7105791e5180dae2d3b73fe562166bcfae58a12c88",
+    "rv1909/luke": "5ed1499f86b19b04460461cbdf6558f6fb19f45a1734d47e3437b94e77291650",
+    "rv1909/john": "0d4eb3ca1250978afc1dbb8811526fbfbdbf18186d3837f19caf165f760b0895",
+    "rv1909/acts": "63912af11c015421f3e010b80ea669bfc9095ab20dacacdb07a878b8e1d9ff85",
+    "rv1909/romans": "c9a035eb062c8d442b4ff312652c6e48af3e9d6966cda3b8911a0e7aec8eb7fc",
+    "rv1909/1-corinthians": "797fa597cbfe9808d97b40c2740987bf75adb5f20c3c19dd84e9f022ce036c86",
+    "rv1909/2-corinthians": "63502096c51b3b832b425d82344c00e3ce8d0114e2cd7477329bded9d47bcde3",
+    "rv1909/galatians": "942f9e32c680b3dbec0f9874057c3d55e52231593dc58f9097d531fa8e6e17c1",
+    "rv1909/ephesians": "28ff5c31fda1ecb565c06a3e51c1a1495e97aef980a549a2ae6ec734ffae3d39",
+    "rv1909/philippians": "2a25ab4bd2f39ecac02b44ef32c3507bc61b0f20ede41d7ac0060be64bce2e3a",
+    "rv1909/colossians": "865b00390f3435eb295fcfc6a783af75a913a1db82902cb4768447f3bbc5be2b",
+    "rv1909/1-thessalonians": "17af47f30cfd13368c0f5008150d4aa31c3508cfd94c37133f38eed0b539eb27",
+    "rv1909/2-thessalonians": "f4c2a1fc997afb9eff78a70d3923db25c3881d46eef28e8ca9b63d39f15e3cab",
+    "rv1909/1-timothy": "9d1460e10ea902697c19f194331545bbc13f02aae8bb6e75c338e3377f23eeb7",
+    "rv1909/2-timothy": "3bddc6297e9f1cd7b07709b9658c8c3e13b56ca81033330f02220d40f2a490b9",
+    "rv1909/titus": "9c2ca709c9d30ee7113a194358941480177feef2b94bf1440346f717e94f227d",
+    "rv1909/philemon": "8dd96d254c881bd63ce8aa82fcb2999dc9fe5e3e70be1c332a6dd6ae020a00df",
+    "rv1909/hebrews": "15662e1237213f4a8d5bcd210f1322992c988a76d527737fc1acac6b516e81eb",
+    "rv1909/james": "8ddab0da24a57cbd5aa58d00140cfd342464c86382f2ab2dbe82948da4f7c4f3",
+    "rv1909/1-peter": "22c6ef6adccb3c07576a264a4d017fe3820aaa854410ff0ca353b740f8fa3188",
+    "rv1909/2-peter": "d6181ed8f882c9f280c08ff2c9570a5bcbf96ba1e4c3b37713d933baf8957be7",
+    "rv1909/1-john": "a93a77d9229a47f1c74c075ed3660c3773cf1ca564271cf1e128f5aed268b227",
+    "rv1909/2-john": "6f452f1d005652ab19431490b1388a3a2aeb12cccdedf48b7eac258b26bffc06",
+    "rv1909/3-john": "c3774cfd5d232cc960500526d5627cca5f271bfa7fe738bf8e95f04478cc1300",
+    "rv1909/jude": "29660ab1d9410693cbbd2defff5046bca6848aa094599622ab60f20d8c3b36c8",
+    "rv1909/revelation": "586e29e7791481b272fc609f5624b891682a57e7386b63d465826f6311970e24",
+    "rv1909/search": "6ca2738bc4d389671bec7fe53f540e8df9997fbac873fccc917a8b7cadb2efe3",
+    "web/genesis": "9eceb129c038bbf29eb62f2cc2baf1f53f76ca911585fe4ace8778ff7d2a84ef",
+    "web/exodus": "65e856b0c2231cea40f5c5c3ef19c50c1f24b614457eab577f39ed6b0fdea619",
+    "web/leviticus": "7e12e5131ef8f9d23e3a3c941f1d493a6cc294e122fc7552affdb7b20b0fa86f",
+    "web/numbers": "2e3777b9ccc7d18cac07a786f336f7995b882f97e2ee2e996142361e0b0647cd",
+    "web/deuteronomy": "8eb1f683c8ccdf394f87293017b169a01c8058cdd3e089d9f3ba35a5e4e814d6",
+    "web/joshua": "e6d571a92e705e2c9eeedbfc31bdd88a637715d794918c5a2ca0edca805b0f5e",
+    "web/judges": "8441d91e46002e463089ef4c624f70d83dbf8e1880bb8d98f34296661351026e",
+    "web/ruth": "1b7dd470dac3baff110eb333164f32ed2f2fa89d96fa2a0856aeb7cbcc435a1d",
+    "web/1-samuel": "f9a42923d1ee7bc4d1b7a3d9a3a9b50c25e350086a94a4a9ac88fc57830be0f0",
+    "web/2-samuel": "0680d6c110a961a31f360273eaf9b3747c4e6b84fc2becc658554ada2e66f7d7",
+    "web/1-kings": "0ba7ef48cee995a811ab0975d4433684c896675e40f925ed01dcad2065c2b75f",
+    "web/2-kings": "0ed8a49aeb51fe03a0ef642504012f0280f3e0b43c23df0b207c50b0bac0cf81",
+    "web/1-chronicles": "81e47d1877ca8b639836640cf692b90b54b4250830707a44735ea44a51322db6",
+    "web/2-chronicles": "a04fc7f276718d4bd41d3990b947d1b46154adc55fa1257cb626b57d33f60532",
+    "web/ezra": "8f4017e34fb2ef21e04913ee5c417ae791aef718c63092bd126e1024ad520eb5",
+    "web/nehemiah": "d1d7e8855a61e54368c355f89e06bec8cc7cf2fcc1e1b64f647bab6cf8995894",
+    "web/esther": "498883311d32672a43e7cbe50b8c75f13b5f98e2f7db2123d63365ea92eee64e",
+    "web/job": "229aada62942527b924bf83269a5456caac8b9c974525c29e1a300a49c6a01a0",
+    "web/psalms": "0910b8d030bcecd7994ff651754ee17ec83480f8fd4bbf1550d87e7fd2be9de7",
+    "web/proverbs": "4346602b6d4edbcedc3a6afa0a40255b1f2f6a19990f5c8aa9dfeaa8687548df",
+    "web/ecclesiastes": "e1cb6a9d129d28acec853e161915e7babcad20c0f20b627ce11abe78b44dcf5b",
+    "web/song-of-songs": "4681aee5b257fe72472854fe08c569c9e95e48efe7309aafdeff48954bb89917",
+    "web/isaiah": "bb19b675d019adbf3d2899b5c87d9c03519f98eb9797fff76298d35874d9d613",
+    "web/jeremiah": "0ec9bc94599aa838844abf1d88a85d9e33279354a1828e5c72e2e4451c201100",
+    "web/lamentations": "a358b2f2a646e18faeed7bc326d0c82c1399bdb004aab0f8d20d972f50fdd552",
+    "web/ezekiel": "79ee1fce4716a570bb57bdecdc4e090cbab89c1f981cfc59bed835686056d530",
+    "web/daniel": "8a11a227c551b9be31efc0f0fd4a048c97a8d4a96ff58774bee2dcc3d60599a2",
+    "web/hosea": "1f5864819565a599595c7fdef5860f16ea273f4c88d6224c886fcea52341c887",
+    "web/joel": "37579f7cfcb05ca9ce0f37c3db2556f75614b11da8534f08779911e18b90e1e8",
+    "web/amos": "4cd977fbc8fe09e6d144f9cf1e51a47937c05c2fb7bc6be72169364629f0e793",
+    "web/obadiah": "566a0481e97be733630ba81b7696795251e7a9d22813920977bbd9e28432aa62",
+    "web/jonah": "1481fbb07b6e65d5562b22a9eee7dab9fe9f4426d37233a88859698c004606bd",
+    "web/micah": "51f52d59d702b8004d5e58b3fed3a898c73136866ffb8a4628e365d77f79ba19",
+    "web/nahum": "97aff2f7dc006d625f77496803f3caa2d238745cb3da1fcf45c4db6da152bb09",
+    "web/habakkuk": "f704ac6316259287da34976759b1507ec4e9a5aa4587a450d9828294503e8bde",
+    "web/zephaniah": "7b5af59fe54c786b5e48118a04d866d20aec00387606895375e538e2fcb4c415",
+    "web/haggai": "f8289413ca8cffaeeae005876443ffb61de6bd4541c1995c6bf295d0602898f2",
+    "web/zechariah": "90f794301817a0619c0ecebd59572f5651d9e95b8f63907ceea1f3d864e5ffc0",
+    "web/malachi": "d42fcfd5d505b221537a618f66e2407a6cb9cb5e3f02be0b0b793f71a4c0bdf4",
+    "web/matthew": "45bdbe458f45f1dec2d48a6a00597d7f904f7e2349b3478c15560f9ca8f0da54",
+    "web/mark": "dac2c5977e0c42fb8901fb494cd6e0eabc44bc4d556c561efd517a1c6d1f8f9e",
+    "web/luke": "22469b1788ea5e2ca01e4bbac3fe59d4c2f7bc4ac7b665150b17b896e30527e4",
+    "web/john": "0f939fae2c22fc6b8f446340376c2e5522b7581705d67ec180923a82d4e7ef0a",
+    "web/acts": "445ac3c8368e9754e1a1775bcb78f22830f6914c4b2b5852b92d1dbd5f13896b",
+    "web/romans": "d60c64f68e46f46b7e8c0e0a992cad7e1c5372537d5d83ec3d2fd1fc84ae00ce",
+    "web/1-corinthians": "8396ec754206f8e349385f02bac67737dac3d49a93bd6d0b5392af75adf72b5a",
+    "web/2-corinthians": "c1ec065a9fdc0cbb8f9c6557f66f05c743cd22a1c8351235d6a40038d72b8248",
+    "web/galatians": "2454a1d4ba5df6d6e50db63af5dcb5aca8728d05a1674cfe5971e2e237cdaac8",
+    "web/ephesians": "9e715505161a1971213c28e432e7b17cd9ee42c5b9175bf44986ecaf26bf01a8",
+    "web/philippians": "66e6f3d03c44fb54f0368b01562864cb205be60a4afdd4fb27999c53ed64f3c5",
+    "web/colossians": "e32195bd6b32e1da2c61e000d937b44902742c1918b40e82aaaec76c1c6127a2",
+    "web/1-thessalonians": "1d45111d5d7045e6a1781be479112ea01779da9056ac64770784e329d28d5f80",
+    "web/2-thessalonians": "d4e94cd5cb30ff7f1a9b5e3574c9fdfeefc384c52dbf357700a271f064bda0a2",
+    "web/1-timothy": "7bc899b0622e224540de81d126ad58c56a9eefae713a03f8d4af96b76ab69f0f",
+    "web/2-timothy": "39c1c1345c0a084fdc021e21232683f6d5f84ea35271a1f39808f818c679fcae",
+    "web/titus": "93f12037131cc5926945f209b0dad24e219101607d597d9bc10cd48eba1c441e",
+    "web/philemon": "579ee31bf137774e17f5877ca0f891f7e36a3e4d577e1f0881ac861103e341e0",
+    "web/hebrews": "90bd3ae99c915cd82376fe23826ef0abc61f52797d7230dc428ea39690484a0d",
+    "web/james": "ac0a0b498dfa3d8361d487d5e1810a79319e0c562b06240abbeaeffdb369e9dc",
+    "web/1-peter": "c8bd19d665d29f1161343b20f0dc4f7032edcd87c439a8f5859f258054eece56",
+    "web/2-peter": "663ccc8246846a6b59ecffd2d47fa23844c56d8a8c47e5a1c025af4ab8c0eb1d",
+    "web/1-john": "7b5380f608bc287ba3b892609257a6c956ef8d9383d9a55cc9d20f8506252528",
+    "web/2-john": "511458bb396d96646a676d80fe91e0fa4800007798c8bfe64f2be8ac1d0f91de",
+    "web/3-john": "fb7c2ce8b17de0b4cf477e7893435febf9469ad4edf3a7f73626ef62b6eec9ef",
+    "web/jude": "1b1dbbbfb54a30f047dc0c7cbe604a5b5bddc34b5a1a92e34302beddb445ce55",
+    "web/revelation": "e0fe79d573fb79d6aee8309af31458647689d75dbf4fc8f9c9b8e5b2f95e28ae",
+    "web/search": "a5b965bab4c08c55040e588ebb8176edfec76586f19ce2f8f3038442b2c9b2ed",
+    "wlc/genesis": "3ab393d9d5e1dc79b16f917f0600c0a6d7520ffd36e78b7ed63af14c1ccb5df6",
+    "wlc/exodus": "54bf7ca4548d6411e6beb6f0872bffe8ffe955b9c866fbef6b1602ab18161990",
+    "wlc/leviticus": "463265281a162dbab5100a7b4f8c67458217d386e1a28b0b8335f7ab2facb673",
+    "wlc/numbers": "bf054eaed0ab6bf5a0797793606e80217bfde3dbb658f7a5a8f1a251c5bac5af",
+    "wlc/deuteronomy": "945b55cf24f265e8a86b75140da946f797477fef6c8b2370212df3024f592dc0",
+    "wlc/joshua": "762c9441ffece2705ea6772b266e2935654973510363a81d9177b4c61187db71",
+    "wlc/judges": "0dfa157b686640afd2a3337a2cc154cc3b47c7df62e849b480aea19a60395203",
+    "wlc/ruth": "e835b39c46445d19e2743e41a920a8796ce9c3d291101b94c29a785dde84b6ca",
+    "wlc/1-samuel": "6f52aebb4edf602680e8b604d4bc385c1db05e5688619fa874b99c6167e976f3",
+    "wlc/2-samuel": "3c7aefaf27377cb410f93979a7e581dd2d0f77abacf45cf7d067bee29ac4183e",
+    "wlc/1-kings": "ef93f097bc425adbf3986077cebf0e00ebf21d79442e37f2658e7490329af191",
+    "wlc/2-kings": "081c3645b58b8e4d3104cdc0536b6a646327d497ecbe03af32137303a530cdd8",
+    "wlc/1-chronicles": "216499154f4524144bc3e7363f6c4711c885b8a87b170babb244ddbba902800d",
+    "wlc/2-chronicles": "e6033fdceae370e579fa0333072c25d5ee8e69fd116775d461ca09f8fd88153f",
+    "wlc/ezra": "bdf9c397c4e58887e638550b3ba6df713c10ecf3ea449fdf231a0966f63669ce",
+    "wlc/nehemiah": "805c7ca24401eb7bce1e9efd6b18c0b2073b7f1824941888de06f85fe665a819",
+    "wlc/esther": "60bb021594e5c04bcf764b5f53456a8d807bf0e66e2f667553f782b104a8ed47",
+    "wlc/job": "67e914bbe28c8eb47d5116a5d526cb2851c6666f9b5018bb559298de622fa9de",
+    "wlc/psalms": "b5bc4f0a9334b43a0757893d238dca639115f7eb4e119109d63dd4daf6bd4d5e",
+    "wlc/proverbs": "3f5c047b1c2c375b04a28b7ed4da1f648078bfad3fa0195b639714b6b7902970",
+    "wlc/ecclesiastes": "0b9e7fd5808b7b2c0f03064bfc23e2ef19d8838ae5eb1abde3eba34eec3f7e9e",
+    "wlc/song-of-songs": "958783f031add7c98a966902a31716a4346aaaa6fb278e5019d2912fb5842fbf",
+    "wlc/isaiah": "fef36de25fab204152202d7e90c232d50d72fa2646751c6dea1b78dce0c54f9d",
+    "wlc/jeremiah": "6833802a78e632e50fc44036cca8b21e1e7d753ccc157cd1a6830f9ea682dd55",
+    "wlc/lamentations": "18b20b2e51b6ead9376d09f909dda2d9f53a295968f0feb0c0bb246aa4a30a1e",
+    "wlc/ezekiel": "27592d663f884d08421612d83437e91808b2f9765fdf6d92ed68c266c0152640",
+    "wlc/daniel": "741cbb21ac7c76542299643a3ef9fb6bef6b7e87b89beaf178c5a8428ff34d85",
+    "wlc/hosea": "bfe859de779f76228b6541907222ee0e07c633c626084e24845efd6a7eb9fc52",
+    "wlc/joel": "87727032a20ccf099155102bf604c70928c07d183fb970fb800fff9c62bca7c5",
+    "wlc/amos": "8d388aab5c04f2cac0e11d54d14aad462d8070df653597313be33e49e0e419cf",
+    "wlc/obadiah": "dab52577facff181fb065a6369fd5d1de1734dad9f634bb9e77659ff48933430",
+    "wlc/jonah": "b70b4658f554adc7d4ce9095a39fb30b16ef914e60709da86d71a7dc02c54cd1",
+    "wlc/micah": "7c1e6cab6c028d44184ea834d1bfa26d61e373d34927d1d45fd13b695e813026",
+    "wlc/nahum": "dd87ad1ce31c04823b3cff03087bd7b28ade1a5e2b3b559073edc49ade94dbb4",
+    "wlc/habakkuk": "96d48e08e0e1c663e9dc0826aa6b99935c9de404e6b4fdc5e912494ec75f5ac9",
+    "wlc/zephaniah": "786430b69e3e29639896d61caa832691836d0b0991a049318f1b17f1ad72b320",
+    "wlc/haggai": "9c8da69ae44235432deecd60b6be26e77e4f14f21e15a3800477f025580d8fb9",
+    "wlc/zechariah": "0d8c68b0205eb9a656d36c7b028a7f9bd388edbd7abe5e076c242a6a52ee1a31",
+    "wlc/malachi": "1d61337ad8e0ed97ec9b8dceeb30b8239c7d1bc3000ade5095eb9e57ad0b9d60",
+    "wlc/search": "aff4da862be697a5ea01f62aada71b3dcc91dbc25db312bf1500b3e8efdbc81e",
+    "sblgnt/matthew": "4dc78ea837d6f29574d8d576750be9ca1f41893fb68a11d3762fa8607cc956b3",
+    "sblgnt/mark": "83f1432ea62817b63c07b7cc7790613247afe81dd1bebac59dbf64c410a6390f",
+    "sblgnt/luke": "8a7cf8417bfe6aed49b416f1ebc90fef3d1f085b3734724b70208d4adf99640e",
+    "sblgnt/john": "78935cd14e65ab8ad23d4e343be8002fecb4a848b90f4f7826d5ce2680effcf7",
+    "sblgnt/acts": "41763781a5f6e7bcfc90e9816d4c9b5253f8ed7f7fed38ebc4c2bfebef42f38e",
+    "sblgnt/romans": "79ac43f30a34f3e4bf28a842dc5af425628dd52f99d74512baae56673e1ade76",
+    "sblgnt/1-corinthians": "34a10d8184df8465e3ea4a421b2841b218e44c85ef462cb9524cb0d64c54b277",
+    "sblgnt/2-corinthians": "74702a8eef76711263becf77e29cc6db9fdd249ae1594566e54316d496b5de32",
+    "sblgnt/galatians": "ed7166f8da89d7e5325525b0f803f8552141b6be26438d1382f04f6e1e5d00ee",
+    "sblgnt/ephesians": "c6afe4a79015c09d01a4f87e8f251b2ae2627e9d46916dc684f8e958caf27453",
+    "sblgnt/philippians": "c9a720cdaf1b7fbacdc12c9faddf882c64a2269be3957f9e05ef6940aab00b2a",
+    "sblgnt/colossians": "230934499d30b1003d30ec0481b0331af80832802a29248f5d1700421eebe6d2",
+    "sblgnt/1-thessalonians": "af29ac27846e615068566beb1a9bed90702eb4c2da81159960a5220235cae229",
+    "sblgnt/2-thessalonians": "5165a598dab2d77896f3e1d49178754060e781f3b34ddf185e99527be88da2ce",
+    "sblgnt/1-timothy": "cd71f4f74347b02cded7e3e960d0ed9843af92efaa4f3c9655632cd56d5a1748",
+    "sblgnt/2-timothy": "7d7321e341923037b48c9935f4d77cf0a9840bed938a3ce54068e9e5bc21cf71",
+    "sblgnt/titus": "766368843e8fce6cee2405de39bddb869f4a45a034cdc1107f7f6f5a16e4e051",
+    "sblgnt/philemon": "ac0602b167918d1a2b02922412d3d8ddfbe5668f01d85f0c93c49823f2d4c103",
+    "sblgnt/hebrews": "65186f8878b2fa98017897b640fb5bea0df66d62623fe1f5d06066658ece6197",
+    "sblgnt/james": "c2e38e90622dabed2c10b4dabe713c83f7eb5601a04e978f0796df380dd0200f",
+    "sblgnt/1-peter": "5ebb8bc59b830bf2cecfde9434dc833c377d91dc540ae463be34348104d84225",
+    "sblgnt/2-peter": "ab7f4a062bf2a88e85c5d68bc97264e3d21d59f9c68ff7e5af577804be859bda",
+    "sblgnt/1-john": "270a87daee146b2bc43abbee53e0b2dd89e28457b2775ed957c500a339cc1e76",
+    "sblgnt/2-john": "1490a96783dc6c64b8921b9fb3823c80f94243d1e80e5ff33388eb3deb1d645d",
+    "sblgnt/3-john": "73a08fdfca93f47a8482aeb240a19280944ee1711e1b2ed8e459afb226042c39",
+    "sblgnt/jude": "31678df05ebde960a635184e52caa5e6e63bd291a0c7e610bb13f1201cb38bb7",
+    "sblgnt/revelation": "94fd50dc252eec9a50b7166bd87f2b604c37ee6491a5a0f2fdb66b831a3f1282",
+    "sblgnt/search": "261d5ffa019b90aedf4737e4b1ed47fa53c737189278cd6fd596306eb33d1709"
+  }
+}

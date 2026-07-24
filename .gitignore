@@ -6,6 +6,7 @@ coverage/
 *.local
 *.log
 *.tsbuildinfo
+.corpus-cache/
 .env
 .env.*
 !.env.example

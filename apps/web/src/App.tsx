@@ -9,22 +9,22 @@ import {
   ChevronLeft,
   ChevronRight,
   Columns3,
-  Download,
   FileDown,
   FileUp,
-  History,
   Languages,
   Library,
+  Maximize2,
   Menu,
   MessageSquareText,
+  Minimize2,
   Moon,
-  MoreHorizontal,
   PanelLeftClose,
   PanelLeftOpen,
+  Pin,
+  PinOff,
   Search,
   Settings2,
   Sun,
-  TextQuote,
   X,
 } from 'lucide-react';
 import {
@@ -37,28 +37,26 @@ import {
 } from 'react';
 import type {
   Edition,
+  Passage,
   ReadingPosition,
   UserAnnotation,
 } from '@academic-scriptures/domain';
 import {
   collections,
   divisions,
-  editions,
   editionsForWork,
   getDivision,
   getEdition,
   getLabel,
   getWork,
   licenses,
-  passages,
-  passagesFor,
   religions,
   works,
 } from './data/catalog';
+import { loadPassages, searchCorpus } from './data/corpus';
 import {
   isAmbiguousWorkQuery,
   parseReferences,
-  searchText,
   type SearchResult,
 } from './lib/search';
 
@@ -69,7 +67,6 @@ type View =
   | 'reader'
   | 'search'
   | 'notes'
-  | 'offline'
   | 'privacy'
   | 'sources';
 
@@ -77,11 +74,10 @@ interface LocalData {
   schemaVersion: 1;
   annotations: UserAnnotation[];
   bookmarks: string[];
-  history: ReadingPosition[];
-  offlineEditionIds: string[];
+  pins: ReadingPosition[];
+  lastPosition?: ReadingPosition;
   theme: Theme;
   language: Language;
-  continuous: boolean;
   religionId: string;
   sidebarWidth: number;
   sidebarCollapsed: boolean;
@@ -93,14 +89,12 @@ const defaultLocalData: LocalData = {
   schemaVersion: 1,
   annotations: [],
   bookmarks: [],
-  history: [],
-  offlineEditionIds: [],
+  pins: [],
   theme: 'system',
   language:
     typeof navigator !== 'undefined' && navigator.language.startsWith('en')
       ? 'en'
       : 'es',
-  continuous: false,
   religionId: 'christianity',
   sidebarWidth: 276,
   sidebarCollapsed: false,
@@ -111,8 +105,6 @@ const copy = {
     searchPlaceholder: 'Referencia, palabra o frase exacta…',
     catalog: 'Catálogo',
     notes: 'Notas',
-    history: 'Historial',
-    offline: 'Sin conexión',
     chooseReligion: 'Religión',
     library: 'Biblioteca',
     collection: 'Colección',
@@ -122,7 +114,7 @@ const copy = {
     startBody:
       'Selecciona una religión o escribe una referencia. Sin comentarios, recomendaciones ni contenido promocional.',
     continue: 'Continuar leyendo',
-    sourceSample: 'Corpus de muestra con licencia verificada',
+    sourceSample: 'Corpus bíblico completo con licencia verificada',
     search: 'Buscar',
     exact: 'Búsqueda literal',
     open: 'Abrir',
@@ -145,16 +137,16 @@ const copy = {
     selection: 'Selección',
     passage: 'Pasaje',
     emptyNotes: 'Todavía no hay notas privadas.',
-    emptyHistory: 'Todavía no hay lecturas recientes.',
-    download: 'Descargar edición',
-    downloaded: 'Disponible sin conexión',
-    removeDownload: 'Eliminar descarga',
-    manualOnly:
-      'Nada se descarga automáticamente. Elige las ediciones que quieres conservar en este dispositivo.',
+    pinned: 'Fijado',
+    pin: 'Fijar en colección',
+    unpin: 'Quitar de colección',
+    collectionEmpty: 'Fija capítulos para verlos aquí.',
+    maximize: 'Modo de lectura',
+    restore: 'Salir del modo de lectura',
     export: 'Exportar datos',
     import: 'Importar datos',
     privacyWarning:
-      'La exportación será legible y contendrá notas, historial y preferencias. Guárdala en un lugar privado. ¿Continuar?',
+      'La exportación será legible y contendrá notas y preferencias. Guárdala en un lugar privado. ¿Continuar?',
     imported: 'Datos importados correctamente.',
     importError: 'No se pudo validar el archivo.',
     appearance: 'Apariencia',
@@ -166,14 +158,12 @@ const copy = {
     privacy: 'Privacidad',
     sourceCode: 'Código',
     sampleNotice:
-      'Esta compilación incorpora fragmentos verificables para validar el lector. Una religión solo se publicará como corpus completo cuando sus ediciones fuente, española e inglesa estén verificadas.',
+      'La Biblia está completa en RV1909 y WEB, con WLC para el Antiguo Testamento y SBLGNT para el Nuevo. Las demás religiones conservan el estado de muestra.',
   },
   en: {
     searchPlaceholder: 'Reference, word, or exact phrase…',
     catalog: 'Catalog',
     notes: 'Notes',
-    history: 'History',
-    offline: 'Offline',
     chooseReligion: 'Religion',
     library: 'Library',
     collection: 'Collection',
@@ -183,7 +173,7 @@ const copy = {
     startBody:
       'Choose a religion or enter a reference. No commentary, recommendations, or promotional content.',
     continue: 'Continue reading',
-    sourceSample: 'Licensed sample corpus',
+    sourceSample: 'Complete licensed Bible corpus',
     search: 'Search',
     exact: 'Literal search',
     open: 'Open',
@@ -206,16 +196,16 @@ const copy = {
     selection: 'Selection',
     passage: 'Passage',
     emptyNotes: 'No private notes yet.',
-    emptyHistory: 'No recent readings yet.',
-    download: 'Download edition',
-    downloaded: 'Available offline',
-    removeDownload: 'Remove download',
-    manualOnly:
-      'Nothing downloads automatically. Choose the editions you want to keep on this device.',
+    pinned: 'Pinned',
+    pin: 'Pin to collection',
+    unpin: 'Remove from collection',
+    collectionEmpty: 'Pin chapters to see them here.',
+    maximize: 'Reading mode',
+    restore: 'Exit reading mode',
     export: 'Export data',
     import: 'Import data',
     privacyWarning:
-      'The export is readable and includes notes, history, and preferences. Keep it private. Continue?',
+      'The export is readable and includes notes and preferences. Keep it private. Continue?',
     imported: 'Data imported successfully.',
     importError: 'The file could not be validated.',
     appearance: 'Appearance',
@@ -227,7 +217,7 @@ const copy = {
     privacy: 'Privacy',
     sourceCode: 'Source',
     sampleNotice:
-      'This build includes verifiable excerpts to validate the reader. A religion is released as a complete corpus only after source, Spanish, and English editions are verified.',
+      'The Bible is complete in RV1909 and WEB, with WLC for the Old Testament and SBLGNT for the New. Other religions remain samples.',
   },
 } as const;
 
@@ -235,9 +225,16 @@ function loadLocalData(): LocalData {
   try {
     const raw = localStorage.getItem(STORAGE_KEY);
     if (!raw) return defaultLocalData;
-    const parsed = JSON.parse(raw) as Partial<LocalData>;
+    const parsed = JSON.parse(raw) as Partial<LocalData> & {
+      history?: ReadingPosition[];
+    };
     if (parsed.schemaVersion !== 1) return defaultLocalData;
-    return { ...defaultLocalData, ...parsed };
+    return {
+      ...defaultLocalData,
+      ...parsed,
+      pins: Array.isArray(parsed.pins) ? parsed.pins : [],
+      lastPosition: parsed.lastPosition ?? parsed.history?.[0],
+    };
   } catch {
     return defaultLocalData;
   }
@@ -269,8 +266,6 @@ export function App() {
   );
   const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false);
   const [sidebarWidth, setSidebarWidth] = useState(localData.sidebarWidth);
-  const [showParatext, setShowParatext] = useState(false);
-  const [showReferences, setShowReferences] = useState(false);
   const [noteTarget, setNoteTarget] = useState<{
     passageId: string;
     editionId: string;
@@ -278,6 +273,13 @@ export function App() {
   }>();
   const [noteText, setNoteText] = useState('');
   const [notice, setNotice] = useState('');
+  const [notesQuery, setNotesQuery] = useState('');
+  const [passageColumns, setPassageColumns] = useState<
+    Record<string, Passage[]>
+  >({});
+  const [readerLoading, setReaderLoading] = useState(false);
+  const [searching, setSearching] = useState(false);
+  const [focusMode, setFocusMode] = useState(false);
   const importRef = useRef<HTMLInputElement>(null);
   const t = copy[localData.language];
   const language = localData.language;
@@ -313,7 +315,6 @@ export function App() {
     (item) => item.religionId === religionId,
   );
   const activeWorkIds = activeCollections.flatMap((item) => item.workIds);
-  const activeWorks = works.filter((item) => activeWorkIds.includes(item.id));
   const activeDivisions = divisions.filter((item) => item.workId === workId);
   const activeWork = getWork(workId)!;
   const activeDivision = getDivision(divisionId)!;
@@ -321,11 +322,40 @@ export function App() {
   const selectedEditions = editionIds
     .map(getEdition)
     .filter((edition): edition is Edition => Boolean(edition));
-  const lastPosition = localData.history[0];
+  const lastPosition = localData.lastPosition;
 
   const activeCollection = collections.find((collection) =>
     collection.workIds.includes(activeWork.id),
   );
+
+  useEffect(() => {
+    let cancelled = false;
+    setReaderLoading(true);
+    Promise.all(
+      editionIds.map(async (editionId) => [
+        editionId,
+        await loadPassages(editionId, workId, divisionId),
+      ] as const),
+    )
+      .then((entries) => {
+        if (!cancelled) setPassageColumns(Object.fromEntries(entries));
+      })
+      .finally(() => {
+        if (!cancelled) setReaderLoading(false);
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, [divisionId, editionIds, workId]);
+
+  useEffect(() => {
+    const handleFullscreen = () => {
+      if (!document.fullscreenElement) setFocusMode(false);
+    };
+    document.addEventListener('fullscreenchange', handleFullscreen);
+    return () =>
+      document.removeEventListener('fullscreenchange', handleFullscreen);
+  }, []);
 
   const openReading = (
     nextWorkId: string,
@@ -361,7 +391,7 @@ export function App() {
 
     setLocalData((current) => {
       const position: ReadingPosition = {
-        religionId: collection?.religionId ?? current.history[0]?.religionId,
+        religionId: collection?.religionId ?? current.religionId,
         workId: nextWork.id,
         divisionId: nextDivision.id,
         editionIds: preferred ? [preferred.id] : [],
@@ -369,16 +399,7 @@ export function App() {
       } as ReadingPosition;
       return {
         ...current,
-        history: [
-          position,
-          ...current.history.filter(
-            (item) =>
-              !(
-                item.workId === position.workId &&
-                item.divisionId === position.divisionId
-              ),
-          ),
-        ].slice(0, 40),
+        lastPosition: position,
       };
     });
   };
@@ -406,7 +427,7 @@ export function App() {
     setView('catalog');
   };
 
-  const handleSearch = (event: FormEvent) => {
+  const handleSearch = async (event: FormEvent) => {
     event.preventDefault();
     const trimmed = query.trim();
     if (!trimmed) return;
@@ -427,13 +448,49 @@ export function App() {
       return;
     }
 
-    setSearchResults(searchText(trimmed));
+    const searchEdition =
+      selectedEditions[0] ??
+      editionsForWork(workId).find((edition) => edition.language === language);
+    if (!searchEdition) return;
     setView('search');
+    setSearching(true);
+    try {
+      const rows = await searchCorpus(searchEdition.id, trimmed);
+      setSearchResults(
+        rows.map((row) => ({
+          passageId: `${searchEdition.id}:${row.workId}-${row.chapter}:${row.verse}`,
+          workId: row.workId,
+          editionId: `${searchEdition.id.split('-')[0]}-${row.workId}`,
+          locator: `${row.chapter}:${row.verse}`,
+          text: row.text,
+        })),
+      );
+    } finally {
+      setSearching(false);
+    }
   };
 
-  const runLiteralAmbiguousSearch = () => {
-    setSearchResults(searchText(`"${query.trim()}"`));
+  const runLiteralAmbiguousSearch = async () => {
     setAmbiguousWorkId(undefined);
+    const edition =
+      selectedEditions[0] ??
+      editionsForWork(workId).find((item) => item.language === language);
+    if (!edition) return;
+    setSearching(true);
+    try {
+      const rows = await searchCorpus(edition.id, `"${query.trim()}"`);
+      setSearchResults(
+        rows.map((row) => ({
+          passageId: `${edition.id}:${row.workId}-${row.chapter}:${row.verse}`,
+          workId: row.workId,
+          editionId: `${edition.id.split('-')[0]}-${row.workId}`,
+          locator: `${row.chapter}:${row.verse}`,
+          text: row.text,
+        })),
+      );
+    } finally {
+      setSearching(false);
+    }
   };
 
   const changeEdition = (index: number, nextEditionId: string) => {
@@ -523,13 +580,69 @@ export function App() {
     setNoteText('');
   };
 
-  const toggleOfflineEdition = (editionId: string) => {
-    setLocalData((current) => ({
-      ...current,
-      offlineEditionIds: current.offlineEditionIds.includes(editionId)
-        ? current.offlineEditionIds.filter((id) => id !== editionId)
-        : [...current.offlineEditionIds, editionId],
-    }));
+  const currentPinKey = `${workId}:${divisionId}`;
+  const isCurrentPinned = localData.pins.some(
+    (item) => `${item.workId}:${item.divisionId}` === currentPinKey,
+  );
+
+  const togglePin = () => {
+    setLocalData((current) => {
+      const exists = current.pins.some(
+        (item) => `${item.workId}:${item.divisionId}` === currentPinKey,
+      );
+      return {
+        ...current,
+        pins: exists
+          ? current.pins.filter(
+              (item) =>
+                `${item.workId}:${item.divisionId}` !== currentPinKey,
+            )
+          : [
+              ...current.pins,
+              {
+                religionId,
+                workId,
+                divisionId,
+                editionIds,
+                updatedAt: new Date().toISOString(),
+              } as ReadingPosition,
+            ],
+      };
+    });
+  };
+
+  const toggleFocusMode = async () => {
+    if (focusMode) {
+      if (document.fullscreenElement) await document.exitFullscreen();
+      setFocusMode(false);
+      return;
+    }
+    setFocusMode(true);
+    try {
+      await document.documentElement.requestFullscreen();
+    } catch {
+      // The distraction-free layout still works when fullscreen is unavailable.
+    }
+  };
+
+  const moveChapter = (offset: number) => {
+    const workIndex = works.findIndex((item) => item.id === workId);
+    const divisionIndex = activeDivisions.findIndex(
+      (item) => item.id === divisionId,
+    );
+    const nextInWork = activeDivisions[divisionIndex + offset];
+    if (nextInWork) {
+      openReading(workId, nextInWork.id, editionIds[0]);
+      return;
+    }
+    const nextWork = works[workIndex + offset];
+    if (!nextWork || !activeWorkIds.includes(nextWork.id)) return;
+    const nextDivisions = divisions.filter(
+      (item) => item.workId === nextWork.id,
+    );
+    const nextDivision =
+      offset > 0 ? nextDivisions[0] : nextDivisions.at(-1);
+    if (nextDivision) openReading(nextWork.id, nextDivision.id);
   };
 
   const exportData = async () => {
@@ -572,12 +685,15 @@ export function App() {
       if (
         parsed.schemaVersion !== 1 ||
         !Array.isArray(parsed.annotations) ||
-        !Array.isArray(parsed.history) ||
         !Array.isArray(parsed.bookmarks)
       ) {
         throw new Error('Invalid schema');
       }
-      setLocalData({ ...defaultLocalData, ...parsed });
+      setLocalData({
+        ...defaultLocalData,
+        ...parsed,
+        pins: Array.isArray(parsed.pins) ? parsed.pins : [],
+      });
       setNotice(t.imported);
     } catch {
       setNotice(t.importError);
@@ -650,13 +766,6 @@ export function App() {
           >
             <MessageSquareText size={19} />
           </button>
-          <button
-            className={view === 'offline' ? 'active' : ''}
-            onClick={() => setView('offline')}
-            aria-label={t.offline}
-          >
-            <Download size={19} />
-          </button>
         </nav>
       ) : (
         <div className="sidebar-content">
@@ -680,46 +789,34 @@ export function App() {
 
           <div className="sidebar-section">
             <span className="section-label">{t.collection}</span>
-            {activeCollections.map((collection) => (
-              <div className="tree-parent" key={collection.id}>
-                <BookMarked size={17} />
-                <span>{getLabel(collection.labels, language)}</span>
+            {localData.pins.length ? (
+              <div className="pinned-list">
+                {localData.pins.map((pin) => (
+                  <button
+                    key={`${pin.workId}:${pin.divisionId}`}
+                    className={
+                      pin.workId === workId && pin.divisionId === divisionId
+                        ? 'active'
+                        : ''
+                    }
+                    onClick={() =>
+                      openReading(
+                        pin.workId,
+                        pin.divisionId,
+                        pin.editionIds[0],
+                      )
+                    }
+                  >
+                    <Pin size={14} />
+                    <span>
+                      {formatReference(pin.workId, pin.divisionId)}
+                    </span>
+                  </button>
+                ))}
               </div>
-            ))}
-          </div>
-
-          <div className="sidebar-section">
-            <span className="section-label">{t.works}</span>
-            {activeWorks.map((work) => (
-              <button
-                key={work.id}
-                className={`tree-button ${work.id === workId ? 'active' : ''}`}
-                onClick={() => {
-                  const nextDivision = divisions.find(
-                    (division) => division.workId === work.id,
-                  );
-                  openReading(work.id, nextDivision?.id);
-                }}
-              >
-                <span>{getLabel(work.labels, language)}</span>
-                <ChevronRight size={15} />
-              </button>
-            ))}
-          </div>
-
-          <div className="sidebar-section">
-            <span className="section-label">{t.divisions}</span>
-            <div className="division-grid">
-              {activeDivisions.map((division) => (
-                <button
-                  key={division.id}
-                  className={division.id === divisionId ? 'active' : ''}
-                  onClick={() => openReading(workId, division.id)}
-                >
-                  {division.locator}
-                </button>
-              ))}
-            </div>
+            ) : (
+              <p className="sidebar-empty">{t.collectionEmpty}</p>
+            )}
           </div>
 
           <nav className="utility-nav">
@@ -730,22 +827,6 @@ export function App() {
               <MessageSquareText size={17} />
               {t.notes}
               <span>{localData.annotations.length}</span>
-            </button>
-            <button
-              className={view === 'catalog' ? '' : undefined}
-              onClick={() => setView('catalog')}
-            >
-              <History size={17} />
-              {t.history}
-              <span>{localData.history.length}</span>
-            </button>
-            <button
-              className={view === 'offline' ? 'active' : ''}
-              onClick={() => setView('offline')}
-            >
-              <Download size={17} />
-              {t.offline}
-              <span>{localData.offlineEditionIds.length}</span>
             </button>
           </nav>
         </div>
@@ -847,37 +928,6 @@ export function App() {
         </div>
       </div>
 
-      {localData.history.length > 0 && (
-        <section className="compact-section">
-          <div className="section-heading">
-            <h2>{t.history}</h2>
-          </div>
-          <div className="plain-list">
-            {localData.history.slice(0, 6).map((position) => (
-              <button
-                key={`${position.workId}:${position.divisionId}`}
-                onClick={() =>
-                  openReading(
-                    position.workId,
-                    position.divisionId,
-                    position.editionIds[0],
-                  )
-                }
-              >
-                <span>
-                  {formatReference(position.workId, position.divisionId)}
-                </span>
-                <time>
-                  {new Intl.DateTimeFormat(language, {
-                    month: 'short',
-                    day: 'numeric',
-                  }).format(new Date(position.updatedAt))}
-                </time>
-              </button>
-            ))}
-          </div>
-        </section>
-      )}
     </div>
   );
 
@@ -903,40 +953,29 @@ export function App() {
             <p>{t.sourceSample}</p>
           </div>
           <div className="reader-navigation">
-            <button className="icon-button" disabled aria-label={t.previous}>
+            <button
+              className="icon-button"
+              onClick={() => moveChapter(-1)}
+              aria-label={t.previous}
+            >
               <ChevronLeft size={19} />
             </button>
-            <button className="icon-button" disabled aria-label={t.next}>
+            <button
+              className="icon-button"
+              onClick={() => moveChapter(1)}
+              aria-label={t.next}
+            >
               <ChevronRight size={19} />
             </button>
           </div>
         </div>
         <div className="reader-toolbar" aria-label="Reader settings">
           <button
-            className={showParatext ? 'active' : ''}
-            onClick={() => setShowParatext((value) => !value)}
+            className={isCurrentPinned ? 'active' : ''}
+            onClick={togglePin}
           >
-            <TextQuote size={16} />
-            {t.paratext}
-          </button>
-          <button
-            className={showReferences ? 'active' : ''}
-            onClick={() => setShowReferences((value) => !value)}
-          >
-            <BookMarked size={16} />
-            {t.references}
-          </button>
-          <button
-            className={localData.continuous ? 'active' : ''}
-            onClick={() =>
-              setLocalData((current) => ({
-                ...current,
-                continuous: !current.continuous,
-              }))
-            }
-          >
-            <MoreHorizontal size={16} />
-            {t.continuous}
+            {isCurrentPinned ? <PinOff size={16} /> : <Pin size={16} />}
+            {isCurrentPinned ? t.unpin : t.pin}
           </button>
           <span className="toolbar-spacer" />
           <button
@@ -957,7 +996,7 @@ export function App() {
         style={{ '--column-count': editionIds.length } as React.CSSProperties}
       >
         {selectedEditions.map((edition, columnIndex) => {
-          const editionPassages = passagesFor(edition.id, divisionId);
+          const editionPassages = passageColumns[edition.id] ?? [];
           const license = licenses.find(
             (item) => item.id === edition.licenseId,
           );
@@ -1014,6 +1053,13 @@ export function App() {
               </div>
 
               <div className="passage-text">
+                {readerLoading && !editionPassages.length && (
+                  <p className="corpus-loading">
+                    {language === 'es'
+                      ? 'Cargando capítulo…'
+                      : 'Loading chapter…'}
+                  </p>
+                )}
                 {editionPassages.map((passage) => {
                   const bookmarked = localData.bookmarks.includes(passage.id);
                   const annotation = localData.annotations.find(
@@ -1031,11 +1077,6 @@ export function App() {
                         )
                       }
                     >
-                      {showParatext && passage.heading && (
-                        <p className="paratext-label" dir="ltr">
-                          {passage.heading}
-                        </p>
-                      )}
                       <span className="verse-number">{passage.number}</span>
                       <span>{passage.text}</span>
                       <span className="verse-actions" dir="ltr">
@@ -1060,17 +1101,6 @@ export function App() {
                           />
                         </button>
                       </span>
-                      {showParatext && passage.translatorNote && (
-                        <p className="translator-note" dir="ltr">
-                          <strong>{t.paratext}:</strong>{' '}
-                          {passage.translatorNote}
-                        </p>
-                      )}
-                      {showReferences && passage.crossReferences && (
-                        <p className="cross-reference" dir="ltr">
-                          {passage.crossReferences.join(' · ')}
-                        </p>
-                      )}
                     </div>
                   );
                 })}
@@ -1081,14 +1111,14 @@ export function App() {
       </div>
 
       <div className="reader-bottom-nav">
-        <button disabled>
+        <button onClick={() => moveChapter(-1)}>
           <ArrowLeft size={16} />
           {t.previous}
         </button>
         <span>
           {getLabel(activeWork.labels, language)} {activeDivision.locator}
         </span>
-        <button disabled>
+        <button onClick={() => moveChapter(1)}>
           {t.next}
           <ArrowRight size={16} />
         </button>
@@ -1104,6 +1134,17 @@ export function App() {
           <p className="eyebrow">{t.search}</p>
           <h1>“{query}”</h1>
         </header>
+
+        {searching && (
+          <div className="empty-state">
+            <Search size={22} />
+            <p>
+              {language === 'es'
+                ? 'Buscando en la edición completa…'
+                : 'Searching the complete edition…'}
+            </p>
+          </div>
+        )}
 
         {ambiguous && (
           <div className="ambiguity-panel">
@@ -1164,16 +1205,19 @@ export function App() {
             {searchResults.map((result) => {
               const work = getWork(result.workId)!;
               const edition = getEdition(result.editionId)!;
-              const passage = passages.find(
-                (item) => item.id === result.passageId,
-              )!;
+              const chapter = result.locator.split(':')[0];
+              const resultDivision = divisions.find(
+                (item) =>
+                  item.workId === result.workId &&
+                  item.locator === chapter,
+              );
               return (
                 <button
                   key={result.passageId}
                   onClick={() =>
                     openReading(
                       result.workId,
-                      passage.divisionId,
+                      resultDivision?.id,
                       result.editionId,
                     )
                   }
@@ -1204,116 +1248,145 @@ export function App() {
     );
   };
 
-  const renderNotes = () => (
-    <div className="utility-page">
-      <header className="page-title">
-        <p className="eyebrow">{t.notes}</p>
-        <h1>{t.notes}</h1>
-      </header>
-      {localData.annotations.length ? (
-        <div className="note-list">
-          {localData.annotations.map((annotation) => {
-            const passage = passages.find(
-              (item) => item.id === annotation.passageId,
-            );
-            const edition = getEdition(annotation.editionId);
-            const work = edition ? getWork(edition.workId) : undefined;
-            return (
-              <article key={annotation.id}>
-                <button
-                  className="note-reference"
-                  onClick={() =>
-                    edition &&
-                    passage &&
-                    openReading(
-                      edition.workId,
-                      passage.divisionId,
-                      edition.id,
-                    )
-                  }
-                >
-                  {work ? getLabel(work.labels, language) : ''}{' '}
-                  {passage?.locator} · {edition?.shortTitle}
-                </button>
-                {annotation.selectedText && (
-                  <blockquote>“{annotation.selectedText}”</blockquote>
-                )}
-                <p>{annotation.note}</p>
-                <div>
-                  <time>
-                    {new Intl.DateTimeFormat(language, {
-                      dateStyle: 'medium',
-                    }).format(new Date(annotation.updatedAt))}
-                  </time>
-                  <button
-                    onClick={() => {
-                      setNoteTarget({
-                        passageId: annotation.passageId,
-                        editionId: annotation.editionId,
-                        selectedText: annotation.selectedText,
-                      });
-                      setNoteText(annotation.note);
-                    }}
-                  >
-                    {language === 'es' ? 'Editar' : 'Edit'}
-                  </button>
-                  <button
-                    onClick={() =>
-                      setLocalData((current) => ({
-                        ...current,
-                        annotations: current.annotations.filter(
-                          (item) => item.id !== annotation.id,
-                        ),
-                      }))
-                    }
-                  >
-                    {language === 'es' ? 'Eliminar' : 'Delete'}
-                  </button>
-                </div>
-              </article>
-            );
-          })}
-        </div>
-      ) : (
-        <div className="empty-state">
-          <MessageSquareText size={22} />
-          <p>{t.emptyNotes}</p>
-        </div>
-      )}
-    </div>
-  );
+  const renderNotes = () => {
+    const normalizedQuery = notesQuery.trim().toLocaleLowerCase();
+    const filtered = localData.annotations.filter((annotation) => {
+      if (!normalizedQuery) return true;
+      const edition = getEdition(annotation.editionId);
+      const work = edition ? getWork(edition.workId) : undefined;
+      return [
+        annotation.note,
+        annotation.selectedText,
+        work ? getLabel(work.labels, language) : '',
+        edition?.shortTitle,
+      ]
+        .filter(Boolean)
+        .join(' ')
+        .toLocaleLowerCase()
+        .includes(normalizedQuery);
+    });
+    const groups = new Map<string, UserAnnotation[]>();
+    filtered.forEach((annotation) => {
+      const edition = getEdition(annotation.editionId);
+      const key = edition?.workId ?? 'unknown';
+      groups.set(key, [...(groups.get(key) ?? []), annotation]);
+    });
 
-  const renderOffline = () => (
-    <div className="utility-page">
-      <header className="page-title">
-        <p className="eyebrow">{t.offline}</p>
-        <h1>{t.offline}</h1>
-        <p>{t.manualOnly}</p>
-      </header>
-      <div className="edition-downloads">
-        {editions.map((edition) => {
-          const downloaded = localData.offlineEditionIds.includes(edition.id);
-          const work = getWork(edition.workId)!;
-          return (
-            <article key={edition.id}>
-              <div>
-                <span>{edition.language.toUpperCase()}</span>
-                <strong>{edition.title}</strong>
-                <small>{getLabel(work.labels, language)}</small>
-              </div>
-              <button
-                className={downloaded ? 'downloaded' : ''}
-                onClick={() => toggleOfflineEdition(edition.id)}
-              >
-                {downloaded ? <Check size={16} /> : <Download size={16} />}
-                {downloaded ? t.removeDownload : t.download}
-              </button>
-            </article>
-          );
-        })}
+    return (
+      <div className="utility-page notes-page">
+        <header className="page-title notes-heading">
+          <div>
+            <p className="eyebrow">{t.notes}</p>
+            <h1>{t.notes}</h1>
+            <p>
+              {localData.annotations.length}{' '}
+              {language === 'es' ? 'anotaciones privadas' : 'private notes'}
+            </p>
+          </div>
+          <label className="notes-search">
+            <Search size={17} />
+            <input
+              value={notesQuery}
+              onChange={(event) => setNotesQuery(event.target.value)}
+              placeholder={
+                language === 'es' ? 'Buscar en mis notas' : 'Search my notes'
+              }
+            />
+          </label>
+        </header>
+
+        {filtered.length ? (
+          <div className="note-map">
+            {Array.from(groups.entries()).map(([groupWorkId, annotations]) => {
+              const groupWork = getWork(groupWorkId);
+              return (
+                <section className="note-group" key={groupWorkId}>
+                  <div className="note-group-heading">
+                    <span>{annotations.length}</span>
+                    <h2>
+                      {groupWork
+                        ? getLabel(groupWork.labels, language)
+                        : groupWorkId}
+                    </h2>
+                  </div>
+                  <div className="note-track">
+                    {annotations.map((annotation) => {
+                      const edition = getEdition(annotation.editionId);
+                      const [, annotationDivisionId, verse] = String(
+                        annotation.passageId,
+                      ).split(':');
+                      const annotationDivision = getDivision(
+                        annotationDivisionId ?? '',
+                      );
+                      return (
+                        <article key={annotation.id}>
+                          <button
+                            className="note-reference"
+                            onClick={() =>
+                              edition &&
+                              annotationDivision &&
+                              openReading(
+                                edition.workId,
+                                annotationDivision.id,
+                                edition.id,
+                              )
+                            }
+                          >
+                            {annotationDivision?.locator}:{verse} ·{' '}
+                            {edition?.shortTitle}
+                          </button>
+                          {annotation.selectedText && (
+                            <blockquote>“{annotation.selectedText}”</blockquote>
+                          )}
+                          <p>{annotation.note}</p>
+                          <div>
+                            <time>
+                              {new Intl.DateTimeFormat(language, {
+                                dateStyle: 'medium',
+                              }).format(new Date(annotation.updatedAt))}
+                            </time>
+                            <button
+                              onClick={() => {
+                                setNoteTarget({
+                                  passageId: annotation.passageId,
+                                  editionId: annotation.editionId,
+                                  selectedText: annotation.selectedText,
+                                });
+                                setNoteText(annotation.note);
+                              }}
+                            >
+                              {language === 'es' ? 'Editar' : 'Edit'}
+                            </button>
+                            <button
+                              onClick={() =>
+                                setLocalData((current) => ({
+                                  ...current,
+                                  annotations: current.annotations.filter(
+                                    (item) => item.id !== annotation.id,
+                                  ),
+                                }))
+                              }
+                            >
+                              {language === 'es' ? 'Eliminar' : 'Delete'}
+                            </button>
+                          </div>
+                        </article>
+                      );
+                    })}
+                  </div>
+                </section>
+              );
+            })}
+          </div>
+        ) : (
+          <div className="empty-state">
+            <MessageSquareText size={22} />
+            <p>{notesQuery ? t.noResults : t.emptyNotes}</p>
+          </div>
+        )}
       </div>
-    </div>
-  );
+    );
+  };
 
   const renderPolicyPage = (page: 'privacy' | 'sources') => (
     <div className="utility-page policy-page">
@@ -1332,8 +1405,8 @@ export function App() {
           </h2>
           <p>
             {language === 'es'
-              ? 'Academic Scriptures no incluye publicidad, analítica conductual, píxeles de seguimiento ni una base de datos de cuentas. Las notas, marcadores, historial y preferencias se almacenan localmente en el navegador.'
-              : 'Academic Scriptures includes no advertising, behavioral analytics, tracking pixels, or account database. Notes, bookmarks, history, and preferences are stored locally in your browser.'}
+              ? 'Academic Scriptures no incluye publicidad, analítica conductual, píxeles de seguimiento ni una base de datos de cuentas. Las notas, marcadores y preferencias se almacenan localmente en el navegador.'
+              : 'Academic Scriptures includes no advertising, behavioral analytics, tracking pixels, or account database. Notes, bookmarks, and preferences are stored locally in your browser.'}
           </p>
           <p>
             {language === 'es'
@@ -1355,10 +1428,6 @@ export function App() {
                   <dt>Redistribution</dt>
                   <dd>{license.redistribution}</dd>
                 </div>
-                <div>
-                  <dt>Offline</dt>
-                  <dd>{license.offlineUse}</dd>
-                </div>
               </dl>
               <a href={license.source.url} target="_blank" rel="noreferrer">
                 {license.source.title} <ArrowRight size={14} />
@@ -1371,7 +1440,7 @@ export function App() {
   );
 
   return (
-    <div className="app-shell">
+    <div className={`app-shell ${focusMode ? 'is-focus-mode' : ''}`}>
       <header className="topbar">
         <button
           className="icon-button mobile-only"
@@ -1444,47 +1513,69 @@ export function App() {
           />
         )}
         <main className="main-content">
-          {view === 'catalog' && renderCatalog()}
-          {view === 'reader' && renderReader()}
-          {view === 'search' && renderSearch()}
-          {view === 'notes' && renderNotes()}
-          {view === 'offline' && renderOffline()}
-          {view === 'privacy' && renderPolicyPage('privacy')}
-          {view === 'sources' && renderPolicyPage('sources')}
-
-          <footer>
-            <nav>
-              <button onClick={() => setView('privacy')}>{t.privacy}</button>
-              <button onClick={() => setView('sources')}>{t.sources}</button>
-              <a
-                href="https://github.com/jorge-zago/academic-scriptures"
-                target="_blank"
-                rel="noreferrer"
-              >
-                {t.sourceCode}
-              </a>
-            </nav>
-            <div className="footer-actions">
-              <button onClick={exportData}>
-                <FileDown size={15} />
-                {t.export}
-              </button>
-              <button onClick={() => importRef.current?.click()}>
-                <FileUp size={15} />
-                {t.import}
-              </button>
+          <div className="main-fixed-actions">
+            <button
+              className="icon-button"
+              onClick={toggleFocusMode}
+              aria-label={focusMode ? t.restore : t.maximize}
+              title={focusMode ? t.restore : t.maximize}
+            >
+              {focusMode ? <Minimize2 size={18} /> : <Maximize2 size={18} />}
+            </button>
+          </div>
+          {focusMode && (
+            <form className="focus-search" onSubmit={handleSearch}>
+              <Search size={17} />
               <input
-                ref={importRef}
-                type="file"
-                accept=".zip,.json,application/zip,application/json"
-                onChange={importData}
-                hidden
+                value={query}
+                onChange={(event) => setQuery(event.target.value)}
+                placeholder={t.searchPlaceholder}
+                aria-label={t.searchPlaceholder}
               />
-            </div>
-            <code>{commit}</code>
-          </footer>
+            </form>
+          )}
+          <div className="main-scroll">
+            {view === 'catalog' && renderCatalog()}
+            {view === 'reader' && renderReader()}
+            {view === 'search' && renderSearch()}
+            {view === 'notes' && renderNotes()}
+            {view === 'privacy' && renderPolicyPage('privacy')}
+            {view === 'sources' && renderPolicyPage('sources')}
+          </div>
         </main>
       </div>
+
+      <footer>
+        <nav>
+          <button onClick={() => setView('privacy')}>{t.privacy}</button>
+          <button onClick={() => setView('sources')}>{t.sources}</button>
+          <a
+            href="https://github.com/jorge-zago/academic-scriptures"
+            target="_blank"
+            rel="noreferrer"
+          >
+            {t.sourceCode}
+          </a>
+        </nav>
+        <div className="footer-actions">
+          <button onClick={exportData}>
+            <FileDown size={15} />
+            {t.export}
+          </button>
+          <button onClick={() => importRef.current?.click()}>
+            <FileUp size={15} />
+            {t.import}
+          </button>
+          <input
+            ref={importRef}
+            type="file"
+            accept=".zip,.json,application/zip,application/json"
+            onChange={importData}
+            hidden
+          />
+        </div>
+        <code>{commit}</code>
+      </footer>
 
       {noteTarget && (
         <div className="modal-backdrop" role="presentation">

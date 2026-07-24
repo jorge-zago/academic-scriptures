@@ -1,6 +1,62 @@
 {
   "$schema": "../packages/corpus/schemas/corpus-registry.schema.json",
   "schemaVersion": 1,
-  "corpora": []
+  "corpora": [
+    {
+      "id": "rv1909-complete",
+      "title": "Santa Biblia — Reina-Valera 1909",
+      "religionId": "christianity",
+      "workId": "christian-bible",
+      "editionId": "rv1909",
+      "language": "es",
+      "direction": "ltr",
+      "licenseId": "license-public-domain",
+      "manifest": "../apps/web/public/corpora/manifest.json",
+      "sha256": "6ca2738bc4d389671bec7fe53f540e8df9997fbac873fccc917a8b7cadb2efe3",
+      "offlineAllowed": true,
+      "completeness": "complete"
+    },
+    {
+      "id": "web-complete",
+      "title": "World English Bible",
+      "religionId": "christianity",
+      "workId": "christian-bible",
+      "editionId": "web",
+      "language": "en",
+      "direction": "ltr",
+      "licenseId": "license-public-domain",
+      "manifest": "../apps/web/public/corpora/manifest.json",
+      "sha256": "a5b965bab4c08c55040e588ebb8176edfec76586f19ce2f8f3038442b2c9b2ed",
+      "offlineAllowed": true,
+      "completeness": "complete"
+    },
+    {
+      "id": "wlc-complete",
+      "title": "Westminster Leningrad Codex",
+      "religionId": "christianity",
+      "workId": "old-testament",
+      "editionId": "wlc",
+      "language": "he",
+      "direction": "rtl",
+      "licenseId": "license-public-domain",
+      "manifest": "../apps/web/public/corpora/manifest.json",
+      "sha256": "aff4da862be697a5ea01f62aada71b3dcc91dbc25db312bf1500b3e8efdbc81e",
+      "offlineAllowed": true,
+      "completeness": "complete"
+    },
+    {
+      "id": "sblgnt-complete",
+      "title": "SBL Greek New Testament",
+      "religionId": "christianity",
+      "workId": "new-testament",
+      "editionId": "sblgnt",
+      "language": "grc",
+      "direction": "ltr",
+      "licenseId": "license-sblgnt",
+      "manifest": "../apps/web/public/corpora/manifest.json",
+      "sha256": "261d5ffa019b90aedf4737e4b1ed47fa53c737189278cd6fd596306eb33d1709",
+      "offlineAllowed": true,
+      "completeness": "complete"
+    }
+  ]
 }
-

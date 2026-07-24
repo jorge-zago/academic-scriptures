@@ -3,7 +3,6 @@ import {
   isAmbiguousWorkQuery,
   parseLexicalQuery,
   parseReferences,
-  searchText,
 } from './search';
 
 describe('reference parser', () => {
@@ -32,7 +31,7 @@ describe('reference parser', () => {
 
 describe('lexical search', () => {
   it('supports exact phrases', () => {
-    expect(searchText('"sea la luz"').length).toBeGreaterThan(0);
+    expect(parseLexicalQuery('"sea la luz"').phrases).toEqual(['sea la luz']);
   });
 
   it('supports required and excluded words', () => {
