@@ -25,6 +25,14 @@ only its catalog, work metadata, and requested passage chunks.
 5. Load a complete edition index only when literal search is requested.
 6. Store pins, bookmarks, highlights, notes, and preferences locally.
 
+## Optional encrypted synchronization
+
+Google Identity Services issues a short-lived browser token scoped to
+`drive.appdata`. The application merges its local data with one encrypted JSON
+file in Google Drive's application-private folder. Encryption and decryption
+happen exclusively through Web Crypto in the browser; neither a refresh token
+nor the encryption phrase is persisted.
+
 ## Current V1 surface
 
 The V1 reader is deliberately client-only. Christianity contains all 66 books

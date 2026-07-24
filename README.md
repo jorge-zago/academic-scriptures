@@ -29,6 +29,15 @@ npm install
 npm run dev
 ```
 
+Optional Google Drive synchronization requires a Web OAuth client ID:
+
+```bash
+copy .env.example .env.local
+```
+
+Set `VITE_GOOGLE_CLIENT_ID`, enable the Google Drive API, and authorize the
+deployment origin. The browser requests only the `drive.appdata` scope.
+
 Quality checks:
 
 ```bash

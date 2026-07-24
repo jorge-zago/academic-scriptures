@@ -11,8 +11,12 @@ import {
   Columns3,
   FileDown,
   FileUp,
+  Fingerprint,
   Languages,
   Library,
+  LockKeyhole,
+  LogIn,
+  LogOut,
   Maximize2,
   Menu,
   MessageSquareText,
@@ -20,11 +24,15 @@ import {
   Moon,
   PanelLeftClose,
   PanelLeftOpen,
+  Pencil,
   Pin,
   PinOff,
   Search,
   Settings2,
+  ShieldCheck,
   Sun,
+  Trash2,
+  UploadCloud,
   X,
 } from 'lucide-react';
 import {
@@ -59,6 +67,15 @@ import {
   parseReferences,
   type SearchResult,
 } from './lib/search';
+import {
+  decryptSyncData,
+  downloadEncryptedSync,
+  encryptSyncData,
+  type GoogleSession,
+  revokeGoogleSession,
+  signInWithGoogle,
+  uploadEncryptedSync,
+} from './lib/googleSync';
 
 type Language = 'es' | 'en';
 type Theme = 'system' | 'light' | 'dark';
@@ -67,6 +84,7 @@ type View =
   | 'reader'
   | 'search'
   | 'notes'
+  | 'account'
   | 'privacy'
   | 'sources';
 
@@ -75,7 +93,7 @@ interface LocalData {
   annotations: UserAnnotation[];
   bookmarks: string[];
   pins: ReadingPosition[];
-  lastPosition?: ReadingPosition;
+  privateDataUpdatedAt: string;
   theme: Theme;
   language: Language;
   religionId: string;
@@ -90,6 +108,7 @@ const defaultLocalData: LocalData = {
   annotations: [],
   bookmarks: [],
   pins: [],
+  privateDataUpdatedAt: '1970-01-01T00:00:00.000Z',
   theme: 'system',
   language:
     typeof navigator !== 'undefined' && navigator.language.startsWith('en')
@@ -113,7 +132,6 @@ const copy = {
     startTitle: 'Textos sagrados, directamente.',
     startBody:
       'Selecciona una religión o escribe una referencia. Sin comentarios, recomendaciones ni contenido promocional.',
-    continue: 'Continuar leyendo',
     sourceSample: 'Corpus bíblico completo con licencia verificada',
     search: 'Buscar',
     exact: 'Búsqueda literal',
@@ -172,7 +190,6 @@ const copy = {
     startTitle: 'Sacred texts, directly.',
     startBody:
       'Choose a religion or enter a reference. No commentary, recommendations, or promotional content.',
-    continue: 'Continue reading',
     sourceSample: 'Complete licensed Bible corpus',
     search: 'Search',
     exact: 'Literal search',
@@ -225,15 +242,12 @@ function loadLocalData(): LocalData {
   try {
     const raw = localStorage.getItem(STORAGE_KEY);
     if (!raw) return defaultLocalData;
-    const parsed = JSON.parse(raw) as Partial<LocalData> & {
-      history?: ReadingPosition[];
-    };
+    const parsed = JSON.parse(raw) as Partial<LocalData>;
     if (parsed.schemaVersion !== 1) return defaultLocalData;
     return {
       ...defaultLocalData,
       ...parsed,
       pins: Array.isArray(parsed.pins) ? parsed.pins : [],
-      lastPosition: parsed.lastPosition ?? parsed.history?.[0],
     };
   } catch {
     return defaultLocalData;
@@ -245,6 +259,42 @@ function formatReference(workId: string, divisionId: string) {
   const division = getDivision(divisionId);
   return `${work?.labels[0]?.value ?? workId} ${division?.locator ?? ''}`.trim();
 }
+
+interface SyncPayload {
+  schemaVersion: 1;
+  annotations: UserAnnotation[];
+  bookmarks: string[];
+  pins: ReadingPosition[];
+  updatedAt: string;
+}
+
+const createSyncPayload = (data: LocalData): SyncPayload => ({
+  schemaVersion: 1,
+  annotations: data.annotations,
+  bookmarks: data.bookmarks,
+  pins: data.pins,
+  updatedAt: data.privateDataUpdatedAt,
+});
+
+const mergeSyncPayload = (
+  local: LocalData,
+  remote?: SyncPayload,
+): LocalData => {
+  if (
+    !remote ||
+    remote.schemaVersion !== 1 ||
+    remote.updatedAt <= local.privateDataUpdatedAt
+  ) {
+    return local;
+  }
+  return {
+    ...local,
+    annotations: remote.annotations,
+    bookmarks: remote.bookmarks,
+    pins: remote.pins,
+    privateDataUpdatedAt: remote.updatedAt,
+  };
+};
 
 export function App() {
   const [localData, setLocalData] = useState<LocalData>(loadLocalData);
@@ -280,6 +330,13 @@ export function App() {
   const [readerLoading, setReaderLoading] = useState(false);
   const [searching, setSearching] = useState(false);
   const [focusMode, setFocusMode] = useState(false);
+  const [googleSession, setGoogleSession] = useState<GoogleSession>();
+  const [syncPassphrase, setSyncPassphrase] = useState('');
+  const [syncFileId, setSyncFileId] = useState<string>();
+  const [syncStatus, setSyncStatus] = useState<
+    'idle' | 'connecting' | 'syncing' | 'synced' | 'error'
+  >('idle');
+  const [syncMessage, setSyncMessage] = useState('');
   const importRef = useRef<HTMLInputElement>(null);
   const t = copy[localData.language];
   const language = localData.language;
@@ -322,7 +379,6 @@ export function App() {
   const selectedEditions = editionIds
     .map(getEdition)
     .filter((edition): edition is Edition => Boolean(edition));
-  const lastPosition = localData.lastPosition;
 
   const activeCollection = collections.find((collection) =>
     collection.workIds.includes(activeWork.id),
@@ -389,19 +445,6 @@ export function App() {
     setView('reader');
     setMobileSidebarOpen(false);
 
-    setLocalData((current) => {
-      const position: ReadingPosition = {
-        religionId: collection?.religionId ?? current.religionId,
-        workId: nextWork.id,
-        divisionId: nextDivision.id,
-        editionIds: preferred ? [preferred.id] : [],
-        updatedAt: new Date().toISOString(),
-      } as ReadingPosition;
-      return {
-        ...current,
-        lastPosition: position,
-      };
-    });
   };
 
   const chooseReligion = (nextReligionId: string) => {
@@ -516,6 +559,7 @@ export function App() {
       bookmarks: current.bookmarks.includes(passageId)
         ? current.bookmarks.filter((id) => id !== passageId)
         : [...current.bookmarks, passageId],
+      privateDataUpdatedAt: new Date().toISOString(),
     }));
   };
 
@@ -574,6 +618,7 @@ export function App() {
           annotation,
           ...current.annotations.filter((item) => item.id !== annotation.id),
         ],
+        privateDataUpdatedAt: now,
       };
     });
     setNoteTarget(undefined);
@@ -607,6 +652,7 @@ export function App() {
                 updatedAt: new Date().toISOString(),
               } as ReadingPosition,
             ],
+        privateDataUpdatedAt: new Date().toISOString(),
       };
     });
   };
@@ -643,6 +689,98 @@ export function App() {
     const nextDivision =
       offset > 0 ? nextDivisions[0] : nextDivisions.at(-1);
     if (nextDivision) openReading(nextWork.id, nextDivision.id);
+  };
+
+  const connectGoogle = async () => {
+    const clientId = import.meta.env.VITE_GOOGLE_CLIENT_ID?.trim();
+    if (!clientId) {
+      setSyncStatus('error');
+      setSyncMessage(
+        language === 'es'
+          ? 'La conexión de Google todavía necesita el identificador OAuth del proyecto.'
+          : 'Google connection still needs the project OAuth client ID.',
+      );
+      setView('account');
+      return;
+    }
+    setSyncStatus('connecting');
+    setSyncMessage('');
+    try {
+      const session = await signInWithGoogle(clientId);
+      setGoogleSession(session);
+      setSyncStatus('idle');
+      setView('account');
+    } catch {
+      setSyncStatus('error');
+      setSyncMessage(
+        language === 'es'
+          ? 'Google no pudo completar la conexión.'
+          : 'Google could not complete the connection.',
+      );
+    }
+  };
+
+  const syncNow = async () => {
+    if (!googleSession || syncPassphrase.length < 10) {
+      setSyncStatus('error');
+      setSyncMessage(
+        language === 'es'
+          ? 'Usa una frase de cifrado de al menos 10 caracteres.'
+          : 'Use an encryption phrase of at least 10 characters.',
+      );
+      return;
+    }
+    setSyncStatus('syncing');
+    setSyncMessage('');
+    try {
+      const remote = await downloadEncryptedSync(googleSession);
+      const remotePayload = remote
+        ? await decryptSyncData<SyncPayload>(
+            remote.encrypted,
+            syncPassphrase,
+          )
+        : undefined;
+      const merged = mergeSyncPayload(localData, remotePayload);
+      setLocalData(merged);
+      const encrypted = await encryptSyncData(
+        createSyncPayload(merged),
+        syncPassphrase,
+      );
+      const nextFileId = await uploadEncryptedSync(
+        googleSession,
+        encrypted,
+        remote?.fileId ?? syncFileId,
+      );
+      setSyncFileId(nextFileId);
+      setSyncStatus('synced');
+      setSyncMessage(
+        language === 'es'
+          ? 'Notas y colección sincronizadas con cifrado de extremo a extremo.'
+          : 'Notes and collection synchronized with end-to-end encryption.',
+      );
+    } catch {
+      setSyncStatus('error');
+      setSyncMessage(
+        language === 'es'
+          ? 'No se pudo descifrar o sincronizar. Comprueba tu frase y vuelve a conectar si el acceso expiró.'
+          : 'Could not decrypt or sync. Check your phrase and reconnect if access expired.',
+      );
+    }
+  };
+
+  const disconnectGoogle = async () => {
+    if (googleSession) {
+      try {
+        await revokeGoogleSession(googleSession);
+      } catch {
+        // Local disconnection still completes if Google cannot be reached.
+      }
+    }
+    setGoogleSession(undefined);
+    setSyncPassphrase('');
+    setSyncFileId(undefined);
+    setSyncStatus('idle');
+    setSyncMessage('');
   };
 
   const exportData = async () => {
@@ -693,6 +831,7 @@ export function App() {
         ...defaultLocalData,
         ...parsed,
         pins: Array.isArray(parsed.pins) ? parsed.pins : [],
+        privateDataUpdatedAt: new Date().toISOString(),
       });
       setNotice(t.imported);
     } catch {
@@ -850,33 +989,6 @@ export function App() {
         <h1>{t.startTitle}</h1>
         <p>{t.startBody}</p>
       </header>
-
-      {lastPosition && (
-        <button
-          className="continue-row"
-          onClick={() =>
-            openReading(
-              lastPosition.workId,
-              lastPosition.divisionId,
-              lastPosition.editionIds[0],
-            )
-          }
-        >
-          <span className="continue-icon">
-            <ArrowRight size={18} />
-          </span>
-          <span>
-            <small>{t.continue}</small>
-            <strong>
-              {formatReference(
-                lastPosition.workId,
-                lastPosition.divisionId,
-              )}
-            </strong>
-          </span>
-          <ChevronRight size={18} />
-        </button>
-      )}
 
       <section className="religion-catalog" aria-label={t.chooseReligion}>
         {religions.map((religion) => {
@@ -1275,14 +1387,7 @@ export function App() {
     return (
       <div className="utility-page notes-page">
         <header className="page-title notes-heading">
-          <div>
-            <p className="eyebrow">{t.notes}</p>
-            <h1>{t.notes}</h1>
-            <p>
-              {localData.annotations.length}{' '}
-              {language === 'es' ? 'anotaciones privadas' : 'private notes'}
-            </p>
-          </div>
+          <h1>{t.notes}</h1>
           <label className="notes-search">
             <Search size={17} />
             <input
@@ -1338,14 +1443,15 @@ export function App() {
                           {annotation.selectedText && (
                             <blockquote>“{annotation.selectedText}”</blockquote>
                           )}
-                          <p>{annotation.note}</p>
-                          <div>
+                          <p className="note-body">{annotation.note}</p>
+                          <div className="note-card-footer">
                             <time>
                               {new Intl.DateTimeFormat(language, {
                                 dateStyle: 'medium',
                               }).format(new Date(annotation.updatedAt))}
                             </time>
                             <button
+                              className="note-action"
                               onClick={() => {
                                 setNoteTarget({
                                   passageId: annotation.passageId,
@@ -1355,18 +1461,23 @@ export function App() {
                                 setNoteText(annotation.note);
                               }}
                             >
+                              <Pencil size={14} />
                               {language === 'es' ? 'Editar' : 'Edit'}
                             </button>
                             <button
+                              className="note-action is-danger"
                               onClick={() =>
                                 setLocalData((current) => ({
                                   ...current,
                                   annotations: current.annotations.filter(
                                     (item) => item.id !== annotation.id,
                                   ),
+                                  privateDataUpdatedAt:
+                                    new Date().toISOString(),
                                 }))
                               }
                             >
+                              <Trash2 size={14} />
                               {language === 'es' ? 'Eliminar' : 'Delete'}
                             </button>
                           </div>
@@ -1388,30 +1499,191 @@ export function App() {
     );
   };
 
+  const renderAccount = () => (
+    <div className="utility-page account-page">
+      <header className="page-title account-heading">
+        <h1>
+          {language === 'es'
+            ? 'Cuenta y sincronización'
+            : 'Account and synchronization'}
+        </h1>
+        <p>
+          {language === 'es'
+            ? 'Google transporta un archivo cifrado. Academic Scriptures nunca recibe tu frase ni puede leer tus notas.'
+            : 'Google transports an encrypted file. Academic Scriptures never receives your phrase and cannot read your notes.'}
+        </p>
+      </header>
+
+      <div className="account-grid">
+        <section className="account-card">
+          <div className="account-card-icon">
+            <Fingerprint size={22} />
+          </div>
+          <div>
+            <span className="account-step">01</span>
+            <h2>
+              {language === 'es' ? 'Conecta Google Drive' : 'Connect Google Drive'}
+            </h2>
+            <p>
+              {language === 'es'
+                ? 'Sólo se solicita acceso a la carpeta privada de datos de esta aplicación. No podemos ver el resto de tu Drive.'
+                : 'Only this application’s private data folder is requested. We cannot see the rest of your Drive.'}
+            </p>
+          </div>
+          {googleSession ? (
+            <div className="connection-state">
+              <ShieldCheck size={17} />
+              <span>
+                {googleSession.email ??
+                  (language === 'es' ? 'Google conectado' : 'Google connected')}
+              </span>
+            </div>
+          ) : (
+            <button
+              className="google-button"
+              onClick={connectGoogle}
+              disabled={syncStatus === 'connecting'}
+            >
+              <span className="google-mark">G</span>
+              {syncStatus === 'connecting'
+                ? language === 'es'
+                  ? 'Conectando…'
+                  : 'Connecting…'
+                : language === 'es'
+                  ? 'Continuar con Google'
+                  : 'Continue with Google'}
+            </button>
+          )}
+        </section>
+
+        <section className={`account-card ${googleSession ? '' : 'is-muted'}`}>
+          <div className="account-card-icon">
+            <LockKeyhole size={22} />
+          </div>
+          <div>
+            <span className="account-step">02</span>
+            <h2>
+              {language === 'es'
+                ? 'Define tu frase de cifrado'
+                : 'Set your encryption phrase'}
+            </h2>
+            <p>
+              {language === 'es'
+                ? 'No se guarda ni se envía. La necesitarás en cada dispositivo; si la pierdes, nadie puede recuperar el contenido.'
+                : 'It is never stored or sent. You need it on every device; if lost, nobody can recover the content.'}
+            </p>
+          </div>
+          <label className="passphrase-field">
+            <span>
+              {language === 'es' ? 'Frase de cifrado' : 'Encryption phrase'}
+            </span>
+            <input
+              type="password"
+              autoComplete="new-password"
+              value={syncPassphrase}
+              onChange={(event) => setSyncPassphrase(event.target.value)}
+              disabled={!googleSession}
+              placeholder={
+                language === 'es'
+                  ? 'Mínimo 10 caracteres'
+                  : 'At least 10 characters'
+              }
+            />
+          </label>
+        </section>
+
+        <section className={`account-card sync-card ${googleSession ? '' : 'is-muted'}`}>
+          <div className="account-card-icon">
+            <UploadCloud size={22} />
+          </div>
+          <div>
+            <span className="account-step">03</span>
+            <h2>{language === 'es' ? 'Sincroniza' : 'Synchronize'}</h2>
+            <p>
+              {language === 'es'
+                ? 'Sincroniza notas, marcadores y capítulos fijados sin enviar texto legible.'
+                : 'Synchronize notes, bookmarks, and pinned chapters without sending readable text.'}
+            </p>
+          </div>
+          <div className="sync-actions">
+            <button
+              className="primary-action"
+              onClick={syncNow}
+              disabled={!googleSession || syncStatus === 'syncing'}
+            >
+              <UploadCloud size={16} />
+              {syncStatus === 'syncing'
+                ? language === 'es'
+                  ? 'Sincronizando…'
+                  : 'Synchronizing…'
+                : language === 'es'
+                  ? 'Sincronizar ahora'
+                  : 'Sync now'}
+            </button>
+            {googleSession && (
+              <button className="secondary-action" onClick={disconnectGoogle}>
+                <LogOut size={15} />
+                {language === 'es' ? 'Desconectar' : 'Disconnect'}
+              </button>
+            )}
+          </div>
+        </section>
+      </div>
+
+      {syncMessage && (
+        <p
+          className={`sync-message ${
+            syncStatus === 'error' ? 'is-error' : 'is-success'
+          }`}
+          role="status"
+        >
+          {syncMessage}
+        </p>
+      )}
+    </div>
+  );
+
   const renderPolicyPage = (page: 'privacy' | 'sources') => (
     <div className="utility-page policy-page">
       <header className="page-title">
-        <p className="eyebrow">
-          {page === 'privacy' ? t.privacy : t.sources}
-        </p>
         <h1>{page === 'privacy' ? t.privacy : t.sources}</h1>
       </header>
       {page === 'privacy' ? (
         <div className="policy-copy">
           <h2>
             {language === 'es'
-              ? 'Tus datos permanecen en este dispositivo'
-              : 'Your data stays on this device'}
+              ? 'Tus datos no son nuestro negocio'
+              : 'Your data is none of our business'}
           </h2>
           <p>
             {language === 'es'
-              ? 'Academic Scriptures no incluye publicidad, analítica conductual, píxeles de seguimiento ni una base de datos de cuentas. Las notas, marcadores y preferencias se almacenan localmente en el navegador.'
-              : 'Academic Scriptures includes no advertising, behavioral analytics, tracking pixels, or account database. Notes, bookmarks, and preferences are stored locally in your browser.'}
+              ? 'No vendemos, perfilamos ni monetizamos a quien lee. No existen anuncios, píxeles de seguimiento, analítica conductual, newsletters ni una base de datos central con tus notas. La lectura local no requiere una cuenta.'
+              : 'We do not sell, profile, or monetize readers. There are no ads, tracking pixels, behavioral analytics, newsletters, or central database containing your notes. Local reading requires no account.'}
           </p>
           <p>
             {language === 'es'
-              ? 'La exportación es un archivo legible. Quien obtenga una copia podrá leer su contenido. Cloudflare y los proveedores de red pueden procesar datos técnicos como direcciones IP al servir la aplicación.'
-              : 'Exports are readable files. Anyone who obtains a copy can read their contents. Cloudflare and network providers may process technical data such as IP addresses while serving the application.'}
+              ? 'Academic Scriptures no gana dinero de ninguna forma, no tiene empleados y no acepta publicidad. Es software abierto mantenido sin una empresa detrás que necesite convertir tu atención en ingresos.'
+              : 'Academic Scriptures makes no money in any form, has no employees, and accepts no advertising. It is open software maintained without a company that needs to turn your attention into revenue.'}
+          </p>
+          <h2>
+            {language === 'es'
+              ? 'Sincronización que tampoco podemos leer'
+              : 'Synchronization we still cannot read'}
+          </h2>
+          <p>
+            {language === 'es'
+              ? 'Si conectas Google, el navegador cifra notas, marcadores y capítulos fijados con AES‑GCM antes de subirlos a la carpeta privada de la aplicación en tu Drive. La frase de cifrado nunca se guarda ni se transmite. Google recibe un archivo cifrado; Academic Scriptures no recibe el archivo, la cuenta ni la clave.'
+              : 'If you connect Google, the browser encrypts notes, bookmarks, and pinned chapters with AES-GCM before uploading them to the application-private folder in your Drive. The encryption phrase is never stored or transmitted. Google receives an encrypted file; Academic Scriptures receives neither the file, account, nor key.'}
+          </p>
+          <p>
+            {language === 'es'
+              ? 'Cloudflare y los proveedores de red pueden procesar datos técnicos inevitables, como la dirección IP, para entregar los archivos públicos del sitio. Una exportación manual, en cambio, es legible: protégela.'
+              : 'Cloudflare and network providers may process unavoidable technical data, such as an IP address, to deliver the public site files. A manual export, however, is readable: protect it.'}
+          </p>
+          <p className="privacy-closing">
+            {language === 'es'
+              ? 'Eso es todo. Sin vigilancia, sin embudos, sin distracciones. Ahora deja esta página y ponte a leer la verdad.'
+              : 'That is all. No surveillance, no funnels, no distractions. Now leave this page and go read the truth.'}
           </p>
         </div>
       ) : (
@@ -1464,6 +1736,21 @@ export function App() {
           <kbd>↵</kbd>
         </form>
         <div className="topbar-actions">
+          <button
+            className={`account-trigger ${googleSession ? 'is-connected' : ''}`}
+            onClick={() => setView('account')}
+          >
+            {googleSession ? <ShieldCheck size={17} /> : <LogIn size={17} />}
+            <span>
+              {googleSession
+                ? language === 'es'
+                  ? 'Sincronización'
+                  : 'Sync'
+                : language === 'es'
+                  ? 'Iniciar sesión'
+                  : 'Sign in'}
+            </span>
+          </button>
           <button
             className="icon-button"
             onClick={() =>
@@ -1539,6 +1826,7 @@ export function App() {
             {view === 'reader' && renderReader()}
             {view === 'search' && renderSearch()}
             {view === 'notes' && renderNotes()}
+            {view === 'account' && renderAccount()}
             {view === 'privacy' && renderPolicyPage('privacy')}
             {view === 'sources' && renderPolicyPage('sources')}
           </div>
