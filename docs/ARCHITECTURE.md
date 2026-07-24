@@ -1,7 +1,8 @@
 # Architecture
 
 Academic Scriptures begins as a static React application deployed from
-`apps/web/dist`. Public corpus files will be immutable, versioned static
+`apps/web/dist`. Cloudflare Pages reads this output path from the repository's
+`wrangler.jsonc`. Public corpus files will be immutable, versioned static
 assets. User-created data will be local-first and stored separately.
 
 ## Boundaries
@@ -35,4 +36,3 @@ Direction is metadata (`ltr`, `rtl`, or `auto`), never inferred solely from the
 interface language. Source strings remain Unicode and are not stripped of
 Greek accents, Hebrew marks, or Arabic marks during ingestion. Normalized
 search keys are derived data and never replace display text.
-

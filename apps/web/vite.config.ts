@@ -32,10 +32,14 @@ export default defineConfig({
     }),
   ],
   define: {
-    __BUILD_COMMIT__: JSON.stringify(process.env.COMMIT_SHA ?? 'development'),
+    __BUILD_COMMIT__: JSON.stringify(
+      process.env.CF_PAGES_COMMIT_SHA ??
+        process.env.GITHUB_SHA ??
+        process.env.COMMIT_SHA ??
+        'development',
+    ),
   },
   build: {
     sourcemap: true,
   },
 });
-
